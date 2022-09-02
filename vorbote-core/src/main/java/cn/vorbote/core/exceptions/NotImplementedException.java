@@ -1,7 +1,7 @@
 package cn.vorbote.core.exceptions;
 
 /**
- * NotImplementedException<br>
+ * If you have any feature which is not implemented, you can easily throw this exception.<br>
  * Created at 02/09/2022 16:09
  *
  * @author theod

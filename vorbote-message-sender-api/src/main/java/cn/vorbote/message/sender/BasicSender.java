@@ -12,8 +12,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  */
 public abstract class BasicSender {
 
+    /**
+     * Send a SMS.
+     *
+     * @param request The data to send a sms.
+     * @return The response data from sent message.
+     * @throws JsonProcessingException ObjectMapper could make this exception because
+     *                                 of the data is not serializable.
+     */
     public abstract MessageResponse send(MessageRequest request) throws JsonProcessingException;
 
+    /**
+     * Send several messages to multiple recipients.
+     *
+     * @param request The data to send a sms.
+     * @return The response data from sent message.
+     */
     public abstract MessageResponse batchSend(MessageRequest request);
 
 }
