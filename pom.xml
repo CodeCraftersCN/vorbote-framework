@@ -189,6 +189,12 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>2.13.3</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java</artifactId>
+                <version>3.1.587</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
