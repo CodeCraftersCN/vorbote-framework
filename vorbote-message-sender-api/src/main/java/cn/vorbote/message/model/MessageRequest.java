@@ -4,12 +4,14 @@ import cn.vorbote.message.util.JacksonSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
- * SendRequest<br>
- * Created at 02/09/2022 14:52
- *
- * @author theod
+ * @param appId        App ID, this field will only be used in <b>Tencent Cloud</b>.
+ * @param sign         Sign name.
+ * @param templateCode The sms template code.
+ * @param params       The params of the data.
+ * @param receivers    The recipients.
  */
 public record MessageRequest(
+        String appId,
         String sign,
         String templateCode,
         Object params,

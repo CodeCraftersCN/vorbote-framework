@@ -15,7 +15,7 @@ public final class JacksonSerializer {
 
     private final ObjectMapper objectMapper;
 
-    private JacksonSerializer(ObjectMapper objectMapper) {
+    protected JacksonSerializer(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

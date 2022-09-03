@@ -49,8 +49,7 @@ public final class AliyunSender extends BasicSender {
 
         try {
             var platformResponse = client.getAcsResponse(platformRequest);
-            response = new MessageResponse(platformResponse.getMessage(), platformResponse.getRequestId(),
-                    platformResponse.getCode(), platformResponse.getBizId());
+            response = new MessageResponse(platformResponse.getMessage(), platformResponse.getCode());
             log.info(JacksonSerializer.getInstance().serialize(response));
         } catch (ClientException e) {
             log.error(e.getErrMsg());
