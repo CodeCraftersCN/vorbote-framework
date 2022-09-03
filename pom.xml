@@ -150,13 +150,13 @@
 
             <dependency>
                 <groupId>cn.vorbote</groupId>
-                <artifactId>vorbote-webdev-spring-boot-autoconfigurer</artifactId>
+                <artifactId>vorbote-webdev-spring-boot-autoconfigure</artifactId>
                 <version>4.0.0</version>
             </dependency>
 
             <dependency>
                 <groupId>cn.vorbote</groupId>
-                <artifactId>vorbote-msgsender-spring-boot-autoconfigurer</artifactId>
+                <artifactId>vorbote-msgsender-spring-boot-autoconfigure</artifactId>
                 <version>4.0.0</version>
             </dependency>
 
