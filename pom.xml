@@ -55,6 +55,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring.boot.version>2.7.3</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -100,6 +102,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- In-Project Dependencies -->
             <dependency>
                 <groupId>cn.vorbote</groupId>
                 <artifactId>vorbote-core</artifactId>
@@ -125,27 +128,15 @@
             </dependency>
 
             <dependency>
-                <groupId>com.auth0</groupId>
-                <artifactId>java-jwt</artifactId>
-                <version>3.19.2</version>
+                <groupId>cn.vorbote</groupId>
+                <artifactId>vorbote-message-sender-aliyun</artifactId>
+                <version>4.0.0</version>
             </dependency>
 
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>2.7.3</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-logging</artifactId>
-                <version>2.7.3</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-configuration-processor</artifactId>
-                <version>2.7.3</version>
+                <groupId>cn.vorbote</groupId>
+                <artifactId>vorbote-message-sender-tencent</artifactId>
+                <version>4.0.0</version>
             </dependency>
 
             <dependency>
@@ -159,6 +150,21 @@
                 <artifactId>vorbote-msgsender-spring-boot-autoconfigure</artifactId>
                 <version>4.0.0</version>
             </dependency>
+            <!-- End: In-Project Dependencies -->
+
+            <!-- Third-Party Utility -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>3.19.2</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax</groupId>
@@ -166,6 +172,13 @@
                 <version>8.0.1</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.13.3</version>
+            </dependency>
+
+            <!-- Third-Party Java SDKs -->
             <dependency>
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
@@ -185,15 +198,35 @@
             </dependency>
 
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.13.3</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.tencentcloudapi</groupId>
                 <artifactId>tencentcloud-sdk-java</artifactId>
                 <version>3.1.587</version>
+            </dependency>
+
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+                <version>${spring.boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

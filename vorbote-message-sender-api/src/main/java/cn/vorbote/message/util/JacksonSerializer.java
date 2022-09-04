@@ -11,24 +11,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class JacksonSerializer {
 
-    private static JacksonSerializer _jacksonSerializer;
-
     private final ObjectMapper objectMapper;
 
-    protected JacksonSerializer(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     /**
-     * Get the instance of the serializer.
+     * Constructor
      *
-     * @return The instance of the serializer.
+     * @param objectMapper The object mapper.
      */
-    public static JacksonSerializer getInstance() {
-        if (_jacksonSerializer == null) {
-            _jacksonSerializer = new JacksonSerializer(new ObjectMapper());
-        }
-        return _jacksonSerializer;
+    private JacksonSerializer(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -55,5 +46,33 @@ public final class JacksonSerializer {
      */
     public <T> T deserialize(String json, Class<T> target) throws JsonProcessingException {
         return objectMapper.readValue(json, target);
+    }
+
+    private static JacksonSerializer _jacksonSerializer;
+
+    /**
+     * Get the instance of the serializer.
+     *
+     * @return The instance of the serializer.
+     */
+    public static JacksonSerializer getJacksonSerializer() {
+        return getJacksonSerializer(new ObjectMapper());
+    }
+
+    /**
+     * Get the Jackson Serializer with specified Object Mapper.<br>
+     * <p><b>
+     *     Note:<br>
+     *     You had better not to invoke this method on your own.
+     * </b></p>
+     *
+     * @param objectMapper The object mapper.
+     * @return A Jackson Serializer.
+     */
+    public static JacksonSerializer getJacksonSerializer(ObjectMapper objectMapper) {
+        if (_jacksonSerializer == null) {
+            _jacksonSerializer = new JacksonSerializer(objectMapper);
+        }
+        return _jacksonSerializer;
     }
 }

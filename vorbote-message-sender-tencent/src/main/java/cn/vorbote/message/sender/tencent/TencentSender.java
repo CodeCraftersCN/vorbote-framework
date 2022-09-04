@@ -11,8 +11,6 @@ import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
-import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
-import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,7 +24,16 @@ public final class TencentSender extends BasicSender {
 
     private final SmsClient client;
 
-    public TencentSender(TencentRegion region, String keyId, String keySecret) {
+    private final String appId;
+
+    /**
+     * Generate a SMS Sender which is using Tencent Cloud as the provider.
+     *
+     * @param appId     The app id.
+     * @param keyId     The key id.
+     * @param keySecret The key secret.
+     */
+    public TencentSender(String appId, String keyId, String keySecret) {
         Credential cred = new Credential(keyId, keySecret);
 
         HttpProfile httpProfile = new HttpProfile();
@@ -38,7 +45,8 @@ public final class TencentSender extends BasicSender {
         clientProfile.setSignMethod("HmacSHA256");
         clientProfile.setHttpProfile(httpProfile);
 
-        this.client = new SmsClient(cred, "ap-guangzhou",clientProfile);
+        this.client = new SmsClient(cred, "ap-guangzhou", clientProfile);
+        this.appId = appId;
     }
 
     /**
@@ -52,7 +60,7 @@ public final class TencentSender extends BasicSender {
     @Override
     public MessageResponse send(MessageRequest request) throws JsonProcessingException {
         var req = new SendSmsRequest();
-        req.setSmsSdkAppId(request.appId());
+        req.setSmsSdkAppId(appId);
         req.setSignName(request.sign());
         req.setTemplateId(request.templateCode());
         if (request.params() instanceof String[] value)
@@ -65,7 +73,7 @@ public final class TencentSender extends BasicSender {
             var resp = client.SendSms(req);
             response = new MessageResponse(resp.getSendStatusSet()[0].getMessage(),
                     resp.getSendStatusSet()[0].getCode());
-            log.info(JacksonSerializer.getInstance().serialize(response));
+            log.info(JacksonSerializer.getJacksonSerializer().serialize(response));
         } catch (TencentCloudSDKException e) {
             log.error(e.toString());
         }

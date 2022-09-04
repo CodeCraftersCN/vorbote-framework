@@ -1,6 +1,7 @@
 package cn.vorbote.message.sender.aliyun;
 
 import cn.vorbote.core.exceptions.NotImplementedException;
+import cn.vorbote.message.config.Region;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
 import cn.vorbote.message.sender.BasicSender;
@@ -24,7 +25,7 @@ public final class AliyunSender extends BasicSender {
 
     private final IAcsClient client;
 
-    public AliyunSender(AliyunRegion aliyunRegion, String keyId, String keySecret) {
+    public AliyunSender(Region aliyunRegion, String keyId, String keySecret) {
         this.client = new DefaultAcsClient(
                 DefaultProfile.getProfile(aliyunRegion.getRegionId(), keyId, keySecret));
     }
@@ -50,7 +51,7 @@ public final class AliyunSender extends BasicSender {
         try {
             var platformResponse = client.getAcsResponse(platformRequest);
             response = new MessageResponse(platformResponse.getMessage(), platformResponse.getCode());
-            log.info(JacksonSerializer.getInstance().serialize(response));
+            log.info(JacksonSerializer.getJacksonSerializer().serialize(response));
         } catch (ClientException e) {
             log.error(e.getErrMsg());
         }

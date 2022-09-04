@@ -19,4 +19,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.vorbote</groupId>
+            <artifactId>vorbote-msgsender-spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
