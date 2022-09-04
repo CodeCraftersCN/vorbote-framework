@@ -2,6 +2,7 @@ package cn.vorbote.message.model;
 
 import cn.vorbote.message.util.JacksonSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * To send a SMS via SMS Sender, every single SMS need a MessageRequest.
@@ -38,6 +39,6 @@ public record MessageRequest(
      *                                 will report this exception.
      */
     public String getParams() throws JsonProcessingException {
-        return JacksonSerializer.getJacksonSerializer().serialize(params);
+        return JacksonSerializer.getJacksonSerializer(new ObjectMapper()).serialize(params);
     }
 }

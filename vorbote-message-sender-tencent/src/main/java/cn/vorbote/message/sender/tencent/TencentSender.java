@@ -1,10 +1,13 @@
 package cn.vorbote.message.sender.tencent;
 
+import cn.vorbote.core.exceptions.NotImplementedException;
+import cn.vorbote.message.config.TencentRegion;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
 import cn.vorbote.message.sender.BasicSender;
 import cn.vorbote.message.util.JacksonSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;
@@ -26,14 +29,29 @@ public final class TencentSender extends BasicSender {
 
     private final String appId;
 
+    private final JacksonSerializer jacksonSerializer;
+
     /**
-     * Generate a SMS Sender which is using Tencent Cloud as the provider.
+     * Generate a SMS Sender which is using Tencent Cloud as the service provider.
      *
      * @param appId     The app id.
      * @param keyId     The key id.
      * @param keySecret The key secret.
+     * @see TencentSender#TencentSender(TencentRegion, String, String, String, ObjectMapper)
      */
-    public TencentSender(String appId, String keyId, String keySecret) {
+    public TencentSender(TencentRegion region, String appId, String keyId, String keySecret) {
+        this(region, appId, keyId, keySecret, new ObjectMapper());
+    }
+
+    /**
+     * Generate a SMS Sender which is using Tencent Cloud as the service provider.
+     *
+     * @param appId        The app id.
+     * @param keyId        The key id.
+     * @param keySecret    The key secret.
+     * @param objectMapper Jackson ObjectMapper Utility.
+     */
+    public TencentSender(TencentRegion region, String appId, String keyId, String keySecret, ObjectMapper objectMapper) {
         Credential cred = new Credential(keyId, keySecret);
 
         HttpProfile httpProfile = new HttpProfile();
@@ -45,8 +63,9 @@ public final class TencentSender extends BasicSender {
         clientProfile.setSignMethod("HmacSHA256");
         clientProfile.setHttpProfile(httpProfile);
 
-        this.client = new SmsClient(cred, "ap-guangzhou", clientProfile);
+        this.client = new SmsClient(cred, region.getRegionId(), clientProfile);
         this.appId = appId;
+        this.jacksonSerializer = JacksonSerializer.getJacksonSerializer(objectMapper);
     }
 
     /**
@@ -73,7 +92,7 @@ public final class TencentSender extends BasicSender {
             var resp = client.SendSms(req);
             response = new MessageResponse(resp.getSendStatusSet()[0].getMessage(),
                     resp.getSendStatusSet()[0].getCode());
-            log.info(JacksonSerializer.getJacksonSerializer().serialize(response));
+            log.info(jacksonSerializer.serialize(response));
         } catch (TencentCloudSDKException e) {
             log.error(e.toString());
         }
@@ -88,7 +107,10 @@ public final class TencentSender extends BasicSender {
      * @return The response data from sent message.
      */
     @Override
+    @Deprecated
     public MessageResponse batchSend(MessageRequest request) {
-        return null;
+        throw new NotImplementedException("""
+                This feature will not be implemented as the AliCloud Platform \
+                Send SMS interface supports the transmission of single or multiple SMS recipients.""");
     }
 }
