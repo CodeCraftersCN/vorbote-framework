@@ -14,7 +14,7 @@
     <artifactId>vorbote-framework</artifactId>
     <version>3.6.0-beta0</version>
     <packaging>pom</packaging>
-    <name>VorBotE Framework :: Root</name>
+    <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>
 
     <modules>
@@ -274,6 +274,16 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>*.xml</exclude>
+                            </excludes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
