@@ -25,7 +25,7 @@ import java.util.function.Function;
  * @author sunzsh
  * @author vorbote
  */
-public class CalculationUtil {
+public final class CalculationUtil {
 
     private BigDecimal value;
 
