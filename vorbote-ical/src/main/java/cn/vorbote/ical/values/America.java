@@ -3,22 +3,20 @@ package cn.vorbote.ical.values;
 import cn.vorbote.ical.standards.ITimezone;
 
 /**
- * Timezone<br>
- * Created at 2022/9/20 11:39
+ * America<br>
+ * Created at 2022/9/20 16:32
  *
  * @author vorbote
  */
-public enum Asia implements ITimezone {
+public enum America implements ITimezone {
+    RIO_BRANCO("America/Rio_Branco"),
+    ;
 
-    Kabul("Asia/Kabul"),
-
-    SHANGHAI("Asia/Shanghai");
-
-    private final String timezoneId;
-
-    Asia(String timezoneId) {
+    America(String timezoneId) {
         this.timezoneId = timezoneId;
     }
+
+    private final String timezoneId;
 
     @Override
     public String getTimezoneId() {
