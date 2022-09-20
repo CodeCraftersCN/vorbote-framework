@@ -27,11 +27,9 @@ public abstract sealed class CalendarNode
      * searching for a calendar component of a particular type and category.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>CATEGORIES:APPOINTMENT,EDUCATION</pre>
      * <pre>CATEGORIES:MEETING</pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-2-categories.html"
      * >RFC-5545 - 3.8.1.2. Categories</a></p>
@@ -45,10 +43,8 @@ public abstract sealed class CalendarNode
      * within an individual calendar entry.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>CLASS:protected</pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-3-classification.html"
      * >RFC-5545 - 3.8.1.3. Classification</a></p>
@@ -60,7 +56,6 @@ public abstract sealed class CalendarNode
      * Comment, is used to specify a comment to the calendar user.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>
      * COMMENT:The meeting really needs to include both ourselves
@@ -68,7 +63,6 @@ public abstract sealed class CalendarNode
      * As a matter of fact\, the venue for the meeting ought to be at
      * their site. - - John
      * </pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-4-comment.html"
      * >RFC-5545 - 3.8.1.4. Comment</a></p>
@@ -88,14 +82,12 @@ public abstract sealed class CalendarNode
      * alarm, and to capture the body text for an EMAIL category of alarm.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>
      * DESCRIPTION:Meeting to provide technical review for "Phoenix"
      * design.\nHappy Face Conference Room. Phoenix design team
      * MUST attend this meeting.\nRSVP to team leader.
      * </pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-5-description.html"
      * >RFC-5545 - 3.8.1.5. Description</a></p>
@@ -114,12 +106,10 @@ public abstract sealed class CalendarNode
      * This location has not implement the URI of the location.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>LOCATION:Conference Room - F123\, Bldg. 002</pre>
      * <pre>LOCATION;ALTREP="http://xyzcorp.com/conf-rooms/f123.vcf":
      *      Conference Room - F123\, Bldg. 002</pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-7-location.html"
      * >RFC-5545 - 3.8.1.7. Location</a></p>
@@ -135,10 +125,8 @@ public abstract sealed class CalendarNode
      * percent partially complete.
      * </p>
      *
-     * <p>
      * Template:
      * <pre>PERCENT-COMPLETE:39</pre>
-     * </p>
      *
      * <p>Referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-8-1-8-percent-complete.html"
      * >RFC-5545 - 3.8.1.8. Percent Complete</a></p>
@@ -154,7 +142,6 @@ public abstract sealed class CalendarNode
      * decreasing ordinal priority. A value of 9 is the lowest priority.
      * </p>
      *
-     * <p>
      * Example:
      * <ul style="list-style-type: none;">
      *     <li>
@@ -166,7 +153,6 @@ public abstract sealed class CalendarNode
      *         <pre>PRIORITY:2</pre>
      *     </li>
      * </ul>
-     * </p>
      */
     protected Integer priority;
 
@@ -177,10 +163,8 @@ public abstract sealed class CalendarNode
      * Summary, is used to capture a short, one-line summary about the activity or journal entry.
      * </p>
      *
-     * <p>
      * Example:
      * <pre>SUMMARY:Department Party</pre>
-     * </p>
      */
     protected String summary;
 
@@ -208,11 +192,9 @@ public abstract sealed class CalendarNode
     /**
      * End defines the date and time by which the event ends.
      *
-     * <p>
      * Example:
      * <pre>DTEND:19960401T150000Z</pre>
      * <pre>DTEND;VALUE=DATE:19980704</pre>
-     * </p>
      */
     protected DateTime end;
 
@@ -221,11 +203,9 @@ public abstract sealed class CalendarNode
     /**
      * Start defines the start date and time for the event.
      *
-     * <p>
      * Example:
      * <pre>DTSTART:19980118T073000Z</pre>
      * <pre>DTSTART;VALUE=DATE:19980118</pre>
-     * </p>
      */
     protected DateTime start;
 
@@ -234,10 +214,8 @@ public abstract sealed class CalendarNode
     /**
      * Duration may be used to specify a duration of the event, instead of an explicit end DATE-TIME.
      *
-     * <p>
      * Example:
      * <pre>DURATION:PT100000S</pre>
-     * </p>
      */
     protected TimeSpan duration;
 
@@ -247,10 +225,8 @@ public abstract sealed class CalendarNode
      * URL may be used in a calendar component to convey a location where a more dynamic rendition of the calendar
      * information associated with the calendar component can be found.
      *
-     * <p>
      * Example:
      * <pre>URL:http://example.com/pub/calendars/jsmith/mytime.ics</pre>
-     * </p>
      */
     protected String url;
 

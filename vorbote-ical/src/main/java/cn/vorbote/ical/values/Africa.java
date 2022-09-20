@@ -10,7 +10,6 @@ import cn.vorbote.ical.standards.ITimezone;
  */
 public enum Africa implements ITimezone {
 
-
     BUJUMBURA("Africa/Bujumbura"),
 
     GABORONE("Africa/Gaborone"),

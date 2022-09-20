@@ -26,10 +26,12 @@ public final class Event extends CalendarNode {
     //
     // Methods
     //
+
     /**
      * Add a batch of categories.
      *
      * @param categories A batch of categories.
+     * @return The Event instance.
      */
     public Event addCategories(String... categories) {
         this.categories.addAll(Arrays.asList(categories));
@@ -40,6 +42,7 @@ public final class Event extends CalendarNode {
      * Add a batch of categories.
      *
      * @param categories A batch of categories.
+     * @return The Event instance.
      */
     public Event addCategories(Collection<String> categories) {
         this.categories.addAll(categories);
@@ -50,6 +53,7 @@ public final class Event extends CalendarNode {
      * Add a category.
      *
      * @param category A category.
+     * @return The Event instance.
      */
     public Event addCategory(String category) {
         this.categories.add(category);
@@ -60,6 +64,7 @@ public final class Event extends CalendarNode {
      * Set the classification.
      *
      * @param classification The specified classification value.
+     * @return The Event instance.
      */
     public Event setClassification(Classification classification) {
         this.classification = classification;
@@ -70,6 +75,7 @@ public final class Event extends CalendarNode {
      * Set the comment.
      *
      * @param comment The comment.
+     * @return The Event instance.
      */
     public Event setComment(String comment) {
         this.comment = comment;
@@ -80,6 +86,7 @@ public final class Event extends CalendarNode {
      * Set the description.
      *
      * @param description The description.
+     * @return The Event instance.
      */
     public Event setDescription(String description) {
         this.description = description;
@@ -90,6 +97,7 @@ public final class Event extends CalendarNode {
      * Set the location.
      *
      * @param location The location.
+     * @return The Event instance.
      */
     public Event setLocation(String location) {
         this.location = location;
@@ -100,6 +108,7 @@ public final class Event extends CalendarNode {
      * Set the percent complete value.
      *
      * @param percentComplete The percent complete value.
+     * @return The Event instance.
      */
     public Event setPercentComplete(Integer percentComplete) {
         if (percentComplete < 0 || percentComplete > 100) {
@@ -113,6 +122,7 @@ public final class Event extends CalendarNode {
      * Set a priority.
      *
      * @param priority The priority to be set.
+     * @return The Event instance.
      */
     public Event setPriority(Integer priority) {
         if (priority < 0 || priority > 9) {
@@ -126,6 +136,7 @@ public final class Event extends CalendarNode {
      * Set the summary.
      *
      * @param summary The summary (you can also call it as a title).
+     * @return The Event instance.
      */
     public Event setSummary(String summary) {
         this.summary = summary;
@@ -134,6 +145,9 @@ public final class Event extends CalendarNode {
 
     /**
      * Set the end of this node.
+     *
+     * @param end The end time of this event.
+     * @return The Event instance.
      */
     public Event setEnd(DateTime end) {
         if (this.duration != null) {
@@ -147,6 +161,7 @@ public final class Event extends CalendarNode {
      * Set the start of this event.
      *
      * @param start The date time specify the start time of this event.
+     * @return The Event instance.
      */
     public Event setStart(DateTime start) {
         this.start = start;
@@ -157,6 +172,7 @@ public final class Event extends CalendarNode {
      * Set the duration of this event.
      *
      * @param duration The duration of this event.
+     * @return The Event instance.
      */
     public Event setDuration(TimeSpan duration) {
         if (this.end != null) {
@@ -168,6 +184,9 @@ public final class Event extends CalendarNode {
 
     /**
      * Set the URL.
+     *
+     * @param url The URL.
+     * @return The Event instance.
      */
     public Event setUrl(String url) {
         this.url = url;
@@ -176,6 +195,9 @@ public final class Event extends CalendarNode {
 
     /**
      * Set the uid of this event.
+     *
+     * @param uid The uid.
+     * @return The Event instance.
      */
     public Event setUid(Long uid) {
         this.uid = uid;
@@ -184,6 +206,9 @@ public final class Event extends CalendarNode {
 
     /**
      * Set the domain name of this event.
+     *
+     * @param domainName The domain name.
+     * @return The Event instance.
      */
     public Event setDomainName(String domainName) {
         this.domainName = domainName;
@@ -192,6 +217,9 @@ public final class Event extends CalendarNode {
 
     /**
      * Set the timezone of this event.
+     *
+     * @param timezone The time zone to set.
+     * @return The Event instance.
      */
     public Event setTimezone(ITimezone timezone) {
         this.timezone = timezone;

@@ -8,6 +8,10 @@ package cn.vorbote.ical.standards;
  */
 public interface ITimezone {
 
+    /**
+     * Get the timezone id of this timezone.
+     * @return The timezone id.
+     */
     String getTimezoneId();
 
 }
