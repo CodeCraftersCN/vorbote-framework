@@ -39,6 +39,8 @@ public final class Calendar {
      */
     private String productName;
 
+    private String domainName;
+
     /**
      * Calendar scale, referenced from <a href="https://icalendar.org/iCalendar-RFC-5545/3-7-1-calendar-scale.html"
      * >RFC 5545 - 3.7.1. Calendar Scale</a>.
@@ -88,6 +90,11 @@ public final class Calendar {
         return this;
     }
 
+    public Calendar setDomainName(String domainName) {
+        this.domainName = domainName;
+        return this;
+    }
+
     /**
      * Set the product name for this calendar.
      *
@@ -129,7 +136,9 @@ public final class Calendar {
     public String resolve() {
         var events = new StringBuilder();
         if (CollectionUtil.isNotEmpty(nodes)) {
-            nodes.forEach(item -> events.append(item.resolve()));
+            nodes.forEach(item -> events.append(item
+                    .setDomainName(domainName)
+                    .resolve()));
         }
 
         return "BEGIN:" + TAG + "\n" +

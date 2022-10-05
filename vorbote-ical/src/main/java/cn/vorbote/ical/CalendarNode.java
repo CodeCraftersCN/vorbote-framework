@@ -251,6 +251,11 @@ public abstract sealed class CalendarNode
         this.categories = new ArrayList<>();
     }
 
+    public CalendarNode setDomainName(String domainName) {
+        this.domainName = domainName;
+        return this;
+    }
+
     //
     // Protected methods
     //
