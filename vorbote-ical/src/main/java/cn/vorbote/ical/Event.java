@@ -233,7 +233,12 @@ public final class Event extends CalendarNode {
                 "SUMMARY:" + summary + "\n" +
                 "DTSTART" + Optional.ofNullable(timezone).map(item -> ";TZID=" + item.getTimezoneId()).orElse("") + ":" + start.pattern(CalendarConfig.UTC_FORMAT) + "\n" +
                 Optional.ofNullable(categories)
-                        .map((item) -> "CATEGORIES:" + resolveCategories() + "\n").orElse("") +
+                        .map((item) -> {
+                            if (!item.isEmpty()) {
+                                return "CATEGORIES:" + resolveCategories() + "\n";
+                            }
+                            return null;
+                        }).orElse("") +
                 Optional.ofNullable(duration)
                         .map((item) -> "DURATION:PT" + item.totalSeconds() + "S\n").orElse("") +
                 Optional.ofNullable(end)
