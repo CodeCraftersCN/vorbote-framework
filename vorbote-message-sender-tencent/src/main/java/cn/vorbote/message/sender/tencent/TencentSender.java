@@ -2,9 +2,10 @@ package cn.vorbote.message.sender.tencent;
 
 import cn.vorbote.core.exceptions.NotImplementedException;
 import cn.vorbote.message.config.TencentRegion;
+import cn.vorbote.message.model.BatchMessageRequest;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
-import cn.vorbote.message.sender.BasicSender;
+import cn.vorbote.message.sender.IMessageSender;
 import cn.vorbote.message.util.JacksonSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +15,10 @@ import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20210111.SmsClient;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * TencentSender<br>
@@ -23,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author theod
  */
 @Slf4j
-public final class TencentSender extends BasicSender {
+public final class TencentSender implements IMessageSender<List<String>> {
 
     private final SmsClient client;
 
@@ -44,7 +48,7 @@ public final class TencentSender extends BasicSender {
     }
 
     /**
-     * Generate a SMS Sender which is using Tencent Cloud as the service provider.
+     * Generate an SMS Sender which is using Tencent Cloud as the service provider.
      *
      * @param appId        The app id.
      * @param keyId        The key id.
@@ -52,14 +56,14 @@ public final class TencentSender extends BasicSender {
      * @param objectMapper Jackson ObjectMapper Utility.
      */
     public TencentSender(TencentRegion region, String appId, String keyId, String keySecret, ObjectMapper objectMapper) {
-        Credential cred = new Credential(keyId, keySecret);
+        var cred = new Credential(keyId, keySecret);
 
-        HttpProfile httpProfile = new HttpProfile();
+        var httpProfile = new HttpProfile();
         httpProfile.setReqMethod("POST");
         httpProfile.setConnTimeout(60);
         httpProfile.setEndpoint("sms.tencentcloudapi.com");
 
-        ClientProfile clientProfile = new ClientProfile();
+        var clientProfile = new ClientProfile();
         clientProfile.setSignMethod("HmacSHA256");
         clientProfile.setHttpProfile(httpProfile);
 
@@ -77,27 +81,24 @@ public final class TencentSender extends BasicSender {
      *                                 of the data is not serializable.
      */
     @Override
-    public MessageResponse send(MessageRequest request) throws JsonProcessingException {
+    public MessageResponse send(MessageRequest<List<String>> request) throws JsonProcessingException {
         var req = new SendSmsRequest();
         req.setSmsSdkAppId(appId);
         req.setSignName(request.sign());
-        req.setTemplateId(request.templateCode());
-        if (request.params() instanceof String[] value)
-            req.setTemplateParamSet(value);
+        req.setTemplateId(request.templateId());
+        req.setTemplateParamSet(request.params().toArray(String[]::new));
         req.setPhoneNumberSet(request.receivers());
 
-        MessageResponse response = null;
-
+        SendSmsResponse resp = null;
         try {
-            var resp = client.SendSms(req);
-            response = new MessageResponse(resp.getSendStatusSet()[0].getMessage(),
+            resp = client.SendSms(req);
+            var response = MessageResponse.initResponse(resp.getSendStatusSet()[0].getMessage(),
                     resp.getSendStatusSet()[0].getCode());
-            log.info(jacksonSerializer.serialize(response));
+            log.debug("Sent sms via tencent cloud platform, response message is: {}", jacksonSerializer.serialize(response));
+            return response;
         } catch (TencentCloudSDKException e) {
-            log.error(e.toString());
+            throw new RuntimeException(e);
         }
-
-        return response;
     }
 
     /**
@@ -108,7 +109,7 @@ public final class TencentSender extends BasicSender {
      */
     @Override
     @Deprecated
-    public MessageResponse batchSend(MessageRequest request) {
+    public MessageResponse batchSend(BatchMessageRequest<List<String>> request) {
         throw new NotImplementedException("""
                 This feature will not be implemented as the AliCloud Platform \
                 Send SMS interface supports the transmission of single or multiple SMS recipients.""");

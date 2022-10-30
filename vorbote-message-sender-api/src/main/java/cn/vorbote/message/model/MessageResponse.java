@@ -1,12 +1,23 @@
 package cn.vorbote.message.model;
 
 /**
- * When sent a message via SMS Sender, the server will respond some data.
+ * MessageResponse<br>
+ * Created at 30/10/2022 00:34
  *
- * @param message The status message.
- * @param code    The status code.
+ * @author vorbote
  */
-public record MessageResponse(
-        String message,
-        String code) {
+public final class MessageResponse {
+
+    private String message;
+
+    private String code;
+
+    private MessageResponse(String code, String message) {
+        this.message = message;
+        this.code = code;
+    }
+
+    public static MessageResponse initResponse(String code, String message) {
+        return new MessageResponse(code, message);
+    }
 }

@@ -2,9 +2,10 @@ package cn.vorbote.message.sender.aliyun;
 
 import cn.vorbote.core.exceptions.NotImplementedException;
 import cn.vorbote.message.config.AliyunRegion;
+import cn.vorbote.message.model.BatchMessageRequest;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
-import cn.vorbote.message.sender.BasicSender;
+import cn.vorbote.message.sender.IMessageSender;
 import cn.vorbote.message.util.JacksonSerializer;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 /**
  * SMS Sender implemented in Aliyun Platform.<br>
  * Created at 02/09/2022 14:05
@@ -22,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author theod
  */
 @Slf4j
-public final class AliyunSender extends BasicSender {
+public final class AliyunSender implements IMessageSender<Map<String, Object>> {
 
     private final IAcsClient client;
 
@@ -63,18 +66,18 @@ public final class AliyunSender extends BasicSender {
      *                                 of the data is not serializable.
      */
     @Override
-    public MessageResponse send(MessageRequest request) throws JsonProcessingException {
+    public MessageResponse send(MessageRequest<Map<String, Object>> request) throws JsonProcessingException {
         var platformRequest = new SendSmsRequest();
         platformRequest.setSignName(request.sign());
-        platformRequest.setTemplateCode(request.templateCode());
-        platformRequest.setPhoneNumbers(request.getReceivers());
-        platformRequest.setTemplateParam(request.getParams());
+        platformRequest.setTemplateCode(request.templateId());
+        platformRequest.setPhoneNumbers(resolve(request.receivers()));
+        platformRequest.setTemplateParam(jacksonSerializer.serialize(request.params()));
 
         MessageResponse response = null;
 
         try {
             var platformResponse = client.getAcsResponse(platformRequest);
-            response = new MessageResponse(platformResponse.getMessage(), platformResponse.getCode());
+            response = MessageResponse.initResponse(platformResponse.getCode(), platformResponse.getMessage());
             log.info(jacksonSerializer.serialize(response));
         } catch (ClientException e) {
             log.error(e.getErrMsg());
@@ -95,9 +98,17 @@ public final class AliyunSender extends BasicSender {
      */
     @Deprecated
     @Override
-    public MessageResponse batchSend(MessageRequest request) {
+    public MessageResponse batchSend(BatchMessageRequest<Map<String, Object>> request) {
         throw new NotImplementedException("""
                 This feature will not be implemented as the AliCloud Platform \
                 Send SMS interface supports the transmission of single or multiple SMS recipients.""");
+    }
+
+    private String resolve(String[] receivers) {
+        var builder = new StringBuilder();
+        for (var receiver: receivers) {
+            builder.append(receiver).append(",");
+        }
+        return builder.substring(0, builder.length() - 1);
     }
 }

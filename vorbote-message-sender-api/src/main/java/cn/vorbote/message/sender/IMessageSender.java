@@ -1,5 +1,6 @@
 package cn.vorbote.message.sender;
 
+import cn.vorbote.message.model.BatchMessageRequest;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  *
  * @author theod
  */
-public abstract class BasicSender {
+public interface IMessageSender<T> {
 
     /**
      * Send a SMS.
@@ -20,7 +21,7 @@ public abstract class BasicSender {
      * @throws JsonProcessingException ObjectMapper could make this exception because
      *                                 of the data is not serializable.
      */
-    public abstract MessageResponse send(MessageRequest request) throws JsonProcessingException;
+    MessageResponse send(MessageRequest<T> request) throws JsonProcessingException;
 
     /**
      * Send several messages to multiple recipients.
@@ -28,6 +29,6 @@ public abstract class BasicSender {
      * @param request The data to send a sms.
      * @return The response data from sent message.
      */
-    public abstract MessageResponse batchSend(MessageRequest request);
+    MessageResponse batchSend(BatchMessageRequest<T> request);
 
 }

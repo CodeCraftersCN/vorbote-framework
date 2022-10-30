@@ -12,7 +12,7 @@
 
     <groupId>cn.vorbote</groupId>
     <artifactId>vorbote-framework</artifactId>
-    <version>3.6.1</version>
+    <version>3.7.0</version>
     <packaging>pom</packaging>
     <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>
@@ -175,7 +175,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.13.3</version>
+                <version>2.13.4.1</version>
             </dependency>
 
             <!-- Third-Party Java SDKs -->
@@ -227,6 +227,12 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <scope>test</scope>
                 <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.9.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
