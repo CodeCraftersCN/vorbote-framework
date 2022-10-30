@@ -36,7 +36,7 @@ public final class TencentSender implements IMessageSender<List<String>> {
     private final JacksonSerializer jacksonSerializer;
 
     /**
-     * Generate a SMS Sender which is using Tencent Cloud as the service provider.
+     * Generate an SMS Sender which is using Tencent Cloud as the service provider.
      *
      * @param appId     The app id.
      * @param keyId     The key id.
