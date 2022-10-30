@@ -33,6 +33,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
 
     private final String appId;
 
+    private final String sign;
+
     private final JacksonSerializer jacksonSerializer;
 
     /**
@@ -41,10 +43,10 @@ public final class TencentSender implements IMessageSender<List<String>> {
      * @param appId     The app id.
      * @param keyId     The key id.
      * @param keySecret The key secret.
-     * @see TencentSender#TencentSender(TencentRegion, String, String, String, ObjectMapper)
+     * @see TencentSender#TencentSender(TencentRegion, String, String, String, String, ObjectMapper)
      */
-    public TencentSender(TencentRegion region, String appId, String keyId, String keySecret) {
-        this(region, appId, keyId, keySecret, new ObjectMapper());
+    public TencentSender(TencentRegion region, String sign, String appId, String keyId, String keySecret) {
+        this(region, sign, appId, keyId, keySecret, new ObjectMapper());
     }
 
     /**
@@ -55,7 +57,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
      * @param keySecret    The key secret.
      * @param objectMapper Jackson ObjectMapper Utility.
      */
-    public TencentSender(TencentRegion region, String appId, String keyId, String keySecret, ObjectMapper objectMapper) {
+    public TencentSender(TencentRegion region, String sign, String appId, String keyId, String keySecret, ObjectMapper objectMapper) {
+        this.sign = sign;
         var cred = new Credential(keyId, keySecret);
 
         var httpProfile = new HttpProfile();
@@ -84,7 +87,7 @@ public final class TencentSender implements IMessageSender<List<String>> {
     public MessageResponse send(MessageRequest<List<String>> request) throws JsonProcessingException {
         var req = new SendSmsRequest();
         req.setSmsSdkAppId(appId);
-        req.setSignName(request.sign());
+        req.setSignName(sign);
         req.setTemplateId(request.templateId());
         req.setTemplateParamSet(request.params().toArray(String[]::new));
         req.setPhoneNumberSet(resolve(request.receiver()));

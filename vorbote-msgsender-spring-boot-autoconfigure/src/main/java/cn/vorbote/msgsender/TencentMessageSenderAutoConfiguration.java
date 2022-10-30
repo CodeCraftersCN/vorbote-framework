@@ -37,12 +37,17 @@ public class TencentMessageSenderAutoConfiguration {
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
+        log.debug("Setting ObjectMapper for Tencent Sender.");
         this.objectMapper = objectMapper;
     }
 
     @Bean
     public IMessageSender<List<String>> tencentSender() {
-        return new TencentSender(senderProperties.getRegion(), senderProperties.getAppId(),
-                senderProperties.getSecretId(), senderProperties.getSecretKey(), objectMapper);
+        return new TencentSender(senderProperties.getRegion(),
+                senderProperties.getSign(),
+                senderProperties.getAppId(),
+                senderProperties.getSecretId(),
+                senderProperties.getSecretKey(),
+                objectMapper);
     }
 }

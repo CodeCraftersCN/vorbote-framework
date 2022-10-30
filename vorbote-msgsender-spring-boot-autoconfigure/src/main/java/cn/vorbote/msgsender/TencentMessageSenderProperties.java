@@ -25,6 +25,11 @@ public class TencentMessageSenderProperties {
     private TencentRegion region;
 
     /**
+     * Configure the sign name for sending a message.
+     */
+    private String sign;
+
+    /**
      * Token ID for accessing Tencent Cloud accounts.
      */
     private String secretId;

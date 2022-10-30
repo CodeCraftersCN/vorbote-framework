@@ -27,6 +27,8 @@ import java.util.Map;
 @Slf4j
 public final class AliyunSender implements IMessageSender<Map<String, Object>> {
 
+    private final String sign;
+
     private final IAcsClient client;
 
     private final JacksonSerializer jacksonSerializer;
@@ -34,13 +36,13 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
     /**
      * Create a new Message Sender using Aliyun Platform.
      *
-     * @param region       The region to send from aliyun.
-     * @param keyId        The auth key id.
-     * @param keySecret    The auth key secret.
-     * @see AliyunSender#AliyunSender(AliyunRegion, String, String, ObjectMapper)
+     * @param region    The region to send from aliyun.
+     * @param keyId     The auth key id.
+     * @param keySecret The auth key secret.
+     * @see AliyunSender#AliyunSender(AliyunRegion, String, String, String, ObjectMapper)
      */
-    public AliyunSender(AliyunRegion region, String keyId, String keySecret) {
-        this(region, keyId, keySecret, new ObjectMapper());
+    public AliyunSender(AliyunRegion region, String sign, String keyId, String keySecret) {
+        this(region, sign, keyId, keySecret, new ObjectMapper());
     }
 
     /**
@@ -51,7 +53,8 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
      * @param keySecret    The auth key secret.
      * @param objectMapper Jackson JSON Utility.
      */
-    public AliyunSender(AliyunRegion region, String keyId, String keySecret, ObjectMapper objectMapper) {
+    public AliyunSender(AliyunRegion region, String sign, String keyId, String keySecret, ObjectMapper objectMapper) {
+        this.sign = sign;
         this.client = new DefaultAcsClient(
                 DefaultProfile.getProfile(region.getRegionId(), keyId, keySecret));
         this.jacksonSerializer = JacksonSerializer.getJacksonSerializer(objectMapper);
@@ -68,9 +71,9 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
     @Override
     public MessageResponse send(MessageRequest<Map<String, Object>> request) throws JsonProcessingException {
         var platformRequest = new SendSmsRequest();
-        platformRequest.setSignName(request.sign());
+        platformRequest.setSignName(sign);
         platformRequest.setTemplateCode(request.templateId());
-        platformRequest.setPhoneNumbers(resolve(request.receivers()));
+        platformRequest.setPhoneNumbers(request.receiver());
         platformRequest.setTemplateParam(jacksonSerializer.serialize(request.params()));
 
         MessageResponse response = null;
@@ -102,13 +105,5 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
         throw new NotImplementedException("""
                 This feature will not be implemented as the AliCloud Platform \
                 Send SMS interface supports the transmission of single or multiple SMS recipients.""");
-    }
-
-    private String resolve(String[] receivers) {
-        var builder = new StringBuilder();
-        for (var receiver: receivers) {
-            builder.append(receiver).append(",");
-        }
-        return builder.substring(0, builder.length() - 1);
     }
 }

@@ -37,12 +37,17 @@ public class AliyunMessageSenderAutoConfiguration {
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
+        log.debug("Setting object mapper for Aliyun Sender");
         this.objectMapper = objectMapper;
     }
 
     @Bean
     public IMessageSender<Map<String, Object>> aliyunSender() {
-        return new AliyunSender(senderProperties.getRegion(),
-                senderProperties.getSecretId(), senderProperties.getSecretKey(), objectMapper);
+        return new AliyunSender(
+                senderProperties.getRegion(),
+                senderProperties.getSign(),
+                senderProperties.getSecretId(),
+                senderProperties.getSecretKey(),
+                objectMapper);
     }
 }

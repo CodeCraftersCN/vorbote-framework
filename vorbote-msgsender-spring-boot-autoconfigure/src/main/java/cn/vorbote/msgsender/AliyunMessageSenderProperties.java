@@ -25,6 +25,11 @@ public class AliyunMessageSenderProperties {
     private AliyunRegion region;
 
     /**
+     * Configure the sign name for sending a message.
+     */
+    private String sign;
+
+    /**
      * Token ID for accessing Aliyun accounts.
      */
     private String secretId;
