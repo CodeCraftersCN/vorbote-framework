@@ -87,7 +87,7 @@ public final class TencentSender implements IMessageSender<List<String>> {
         req.setSignName(request.sign());
         req.setTemplateId(request.templateId());
         req.setTemplateParamSet(request.params().toArray(String[]::new));
-        req.setPhoneNumberSet(request.receivers());
+        req.setPhoneNumberSet(resolve(request.receiver()));
 
         SendSmsResponse resp = null;
         try {
@@ -113,5 +113,9 @@ public final class TencentSender implements IMessageSender<List<String>> {
         throw new NotImplementedException("""
                 This feature will not be implemented as the AliCloud Platform \
                 Send SMS interface supports the transmission of single or multiple SMS recipients.""");
+    }
+
+    private String[] resolve(String receiver) {
+        return new String[]{receiver};
     }
 }

@@ -6,7 +6,7 @@ import cn.vorbote.message.model.MessageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
- * BasicSender<br>
+ * IMessage Sender interface.<br>
  * Created at 02/09/2022 14:51
  *
  * @author theod

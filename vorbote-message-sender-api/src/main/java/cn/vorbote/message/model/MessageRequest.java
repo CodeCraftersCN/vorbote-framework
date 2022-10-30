@@ -42,8 +42,4 @@ public final class MessageRequest<T> {
         return params;
     }
 
-    public String[] receivers() {
-        return new String[]{receiver};
-    }
-
 }
