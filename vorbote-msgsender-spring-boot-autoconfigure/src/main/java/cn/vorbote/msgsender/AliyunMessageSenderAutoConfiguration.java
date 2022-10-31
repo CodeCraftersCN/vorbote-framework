@@ -42,7 +42,7 @@ public class AliyunMessageSenderAutoConfiguration {
     }
 
     @Bean
-    public IMessageSender<Map<String, Object>> aliyunSender() {
+    public AliyunSender aliyunSender() {
         return new AliyunSender(
                 senderProperties.getRegion(),
                 senderProperties.getSign(),

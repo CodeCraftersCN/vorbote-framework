@@ -42,7 +42,7 @@ public class TencentMessageSenderAutoConfiguration {
     }
 
     @Bean
-    public IMessageSender<List<String>> tencentSender() {
+    public TencentSender tencentSender() {
         return new TencentSender(senderProperties.getRegion(),
                 senderProperties.getSign(),
                 senderProperties.getAppId(),
