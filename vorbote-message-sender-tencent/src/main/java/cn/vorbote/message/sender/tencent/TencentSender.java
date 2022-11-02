@@ -95,8 +95,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
         SendSmsResponse resp = null;
         try {
             resp = client.SendSms(req);
-            var response = MessageResponse.initResponse(resp.getSendStatusSet()[0].getMessage(),
-                    resp.getSendStatusSet()[0].getCode());
+            var response = MessageResponse.initResponse(
+                    resp.getSendStatusSet()[0].getCode(), resp.getSendStatusSet()[0].getMessage());
             log.debug("Sent sms via tencent cloud platform, response message is: {}", jacksonSerializer.serialize(response));
             return response;
         } catch (TencentCloudSDKException e) {
