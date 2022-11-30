@@ -1,6 +1,5 @@
 package cn.vorbote.msgsender;
 
-import cn.vorbote.message.sender.IMessageSender;
 import cn.vorbote.message.sender.aliyun.AliyunSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 /**
  * MessageSenderAutoConfigure<br>

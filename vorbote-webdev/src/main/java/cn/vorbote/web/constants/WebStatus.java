@@ -1,6 +1,5 @@
 package cn.vorbote.web.constants;
 
-import cn.vorbote.core.constants.Language;
 import lombok.Getter;
 
 import java.util.Arrays;

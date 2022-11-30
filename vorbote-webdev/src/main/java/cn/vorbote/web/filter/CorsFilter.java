@@ -2,12 +2,11 @@ package cn.vorbote.web.filter;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,7 +133,7 @@ public class CorsFilter implements Filter {
      */
     protected static String fromArray(String[] array) {
         StringBuilder builder = new StringBuilder();
-        if (array != null && array.length > 0) {
+        if (array != null) {
             for (String item : array) {
                 builder.append(item).append(",");
             }
