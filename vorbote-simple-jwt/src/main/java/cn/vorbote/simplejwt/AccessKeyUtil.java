@@ -262,18 +262,6 @@ public class AccessKeyUtil {
      * @param expireAfter The time period (seconds) when the new token expired.
      * @return The renewed token.
      */
-    @Deprecated
-    public String renew(String token, int expireAfter) {
-        return renew(token, TimeSpan.builder().seconds(expireAfter).build());
-    }
-
-    /**
-     * Renew the token.
-     *
-     * @param token       The original token.
-     * @param expireAfter The time period (seconds) when the new token expired.
-     * @return The renewed token.
-     */
     public String renew(String token, TimeSpan expireAfter) {
         final DecodedJWT info = this.info(token);
         final HashMap<String, Object> map = new HashMap<>();
