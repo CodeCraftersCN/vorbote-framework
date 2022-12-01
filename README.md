@@ -385,4 +385,4 @@ implementation 'cn.vorbote:vorbote-webdev-spring-boot-starter:4.0.0'
 
 # How to help us?
 
-When you found some problems when using any of these modules, you can report to us by [submitting a GitHub Issue](https%3A%2F%2Fgithub.com%2Fzihluwang%2Fvorbote-framework%2Fissues%2Fnew%3Fassignees%3Dtheodorehills%26labels%3Dbug%26template%3Dbug--.md%26title%3D%5BBUG%5D). Or if you are able to handle this problem by yourself, we are looking forward to receiving your Pull Request!
+When you found some problems when using any of these modules, you can report to us by [submitting a GitHub Issue](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bugreport-en-.md&title=[BUG]). Or if you are able to handle this problem by yourself, we are looking forward to receiving your Pull Request!
