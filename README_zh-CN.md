@@ -210,7 +210,69 @@ response.getCode();    // 查看云平台的响应码
 
 ## Simple JWT
 
+Simple JWT 通过对 `com.auth0:java-jwt` 库进行封装实现了简易的 JWT 令牌功能。
 
+使用方式：
+
+```java
+// Step 1. 创建令牌实用工具
+final var accessKeyUtil = new AccessKeyUtil(JwtAlgorithm algorithm, String secret, String issuer);
+
+// Step 2. 创建令牌
+// 通过 Map<String, Object> 创建令牌
+var token = accessKeyUtil.createToken(TimeSpan expire, String subject, String[] audience, Map<String, Object> claims);
+// 通过 Java Bean 创建令牌
+var token2 = accessKeyUtil.createTokenWithBean(TimeSpan expire, String subject, String[] audience, Object bean);
+
+// Step 3. 验证或解析令牌
+// 验证令牌
+accessKeyUtil.verify(String token);
+// 解析令牌
+DecodedJWT = accessKeyUtil.info(String token);
+// 直接将令牌中的 Payload 解析为指定类型的对象
+T bean = accessKeyUtil.getBean(String token, Class<T> requiredType);
+
+// Step 4. 更新令牌
+var newToken = accessKeyUtil.renew(String token, TimeSpan expireAfter);
+var newToken2 = accessKeyUtil.renewWithBean(String token, TimeSpan expireAfter, Class<?> requiredType);
+```
+
+### 去除令牌中的部分信息
+
+一般来说，通过 Java Bean 创建令牌的方式更为简单，但是有可能这个 Bean 会包含一些不需要或者不能够放在令牌中的数据。由于 JWT 的特性，我们无需知道验证的 secret 就可以直接通过 [JWT 官网](https://jwt.io)在线解析出令牌所包含的所有信息，如下图所示。
+
+![image-20221201204851870](https://dist.cq.vorbote.cn/images/typora-images/image-20221201204851870.png) 
+
+例如下面这个 `User` 类。
+
+```java
+public final class User {
+    private String username;
+    private String password;
+    
+    // no-arg constructor and all-arg constructors...
+    
+    // getters and setters...
+}
+```
+
+我们可以发现，字段 `password` 是无论如何也不能出现在令牌中的，因此，我们只需要对这个类进行如下的修改。
+
+```java
+import cn.vorbote.simplejwt.annotations.JwtIgnore;      // (1)
+
+public final class User {
+    private String username;
+    @JwtIgnore                                          // (2)
+    private String password;
+    
+    // no-arg constructor and all-arg constructors...
+    
+    // getters and setters...
+}
+```
+
+需要改动的地方如上述代码所示，被标记了 **(1)**，**(2)** 的编号。通过 `@JwtIgnore` 标记即可告知令牌解析器忽略这个字段。
 
 ## Web Dev Suite
 

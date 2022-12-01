@@ -233,7 +233,69 @@ service in SpringBoot through the configuration of the `yaml` file.
 
 ## Simple JWT
 
+Simple JWT implemented simpe functions to process **Json Web Token** by encapsulating `com.auth0:java-jwt` lib.
 
+The way to use:
+
+```java
+// Step 1. Create a token utility.
+final var accessKeyUtil = new AccessKeyUtil(JwtAlgorithm algorithm, String secret, String issuer);
+
+// Step 2. Create a token.
+// Build the token through the data in Map<String, Object>.
+var token = accessKeyUtil.createToken(TimeSpan expire, String subject, String[] audience, Map<String, Object> claims);
+// Build the token through the data in a Java Bean.
+var token2 = accessKeyUtil.createTokenWithBean(TimeSpan expire, String subject, String[] audience, Object bean);
+
+// Step 3. Verify or resolve the token.
+// Verify the token.
+accessKeyUtil.verify(String token);
+// Resolve the token.
+DecodedJWT information = accessKeyUtil.info(String token);
+// Resolves the Payload in the token directly to an object of the specified type.
+T bean = accessKeyUtil.getBean(String token, Class<T> requiredType);
+
+// Step 4. Renew the token.
+var newToken = accessKeyUtil.renew(String token, TimeSpan expireAfter);
+var newToken2 = accessKeyUtil.renewWithBean(String token, TimeSpan expireAfter, Class<?> requiredType);
+```
+
+### Remove some unwanted information in the token in create the token with beans.
+
+Generally, it is much more simple to create a token with a java bean. However, it is possible that the bean may contain data that is not required or cannot be placed in the token. Due to the nature of the JWT, we can parse out all the information contained in the token directly online via the [JWT official website](https://jwt.io) without knowing the authentication secret, as shown below.
+
+![image-20221201204851870](https://dist.cq.vorbote.cn/images/typora-images/image-20221201204851870.png) 
+
+Obvisouly, we have measures to handle this problem. As you can see in the class `User` in follow codes .
+
+```java
+public final class User {
+    private String username;
+    private String password;
+    
+    // no-arg constructor and all-arg constructors...
+    
+    // getters and setters...
+}
+```
+
+We can see that the field `password` cannot appear in the token anyway, so we just need to make the following changes to this class.
+
+```java
+import cn.vorbote.simplejwt.annotations.JwtIgnore;      // (1)
+
+public final class User {
+    private String username;
+    @JwtIgnore                                          // (2)
+    private String password;
+    
+    // no-arg constructor and all-arg constructors...
+    
+    // getters and setters...
+}
+```
+
+The required change is shown in the code above and is tagged with the number **(1)**, **(2)**. The annotation `@JwtIgnore` tells the token parser to ignore this field.
 
 ## Web Dev Suite
 
