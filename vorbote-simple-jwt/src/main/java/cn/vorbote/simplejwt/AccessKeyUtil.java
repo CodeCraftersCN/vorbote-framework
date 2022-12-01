@@ -242,20 +242,15 @@ public class AccessKeyUtil {
     public DecodedJWT info(String token) {
         JWTVerifier verifier;
         switch (algorithm) {
-            case HS256:
-                verifier = JWT.require(Algorithm.HMAC256(secret)).build();
-                break;
-            case HS384:
-                verifier = JWT.require(Algorithm.HMAC384(secret)).build();
-                break;
-            case HS512:
-                verifier = JWT.require(Algorithm.HMAC512(secret)).build();
-                break;
-            default:
+            case HS256 -> verifier = JWT.require(Algorithm.HMAC256(secret)).build();
+            case HS384 -> verifier = JWT.require(Algorithm.HMAC384(secret)).build();
+            case HS512 -> verifier = JWT.require(Algorithm.HMAC512(secret)).build();
+            default -> {
                 // 这里理论上应该抛出异常的，但是实在是懒得做了，就先这样吧。
                 // 至于其他的算法，后续再考虑加上。
                 verifier = JWT.require(Algorithm.HMAC256(secret)).build();
                 log.error("This algorithm is not supported yet, will use HMAC256 by default.");
+            }
         }
         return verifier.verify(token);
     }
