@@ -276,9 +276,90 @@ public final class User {
 
 ## Web Dev Suite
 
+该模块致力于给各位开发者提供舒适的 Java Web 开发体验。
 
+### 包 `constants`
+
+其包含了在 Web 开发中常用到的 Web 响应码，并且以枚举数据的形式提供给各位开发者使用。
+
+### 包 `filter`
+
+#### `CorsFilter`
+
+在开发过程中，我们发现了许多开发者在开发前后端分离式项目时，经常碰到浏览器会由于[跨源资源共享](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)问题导致无法通过浏览器的验证而无法获取到需要的数据。通过这个 `CorsFilter` ，开发者可以简单轻松的解决这个问题。
+
+##### 使用方式
+
+如果您直接使用 `Tomcat` 进行开发，那么您需要前往 `/WEB-INF/web.xml` 中添加如下配置：
+
+```xml
+<!-- 由于尖括号本身在 xml 代码中有特殊含义，因此必填项改为使用圆括号代替 -->
+<web-app>
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>cn.vorbote.web.filter.CorsFilter</filter-class>
+        <init-param>
+            <param-name>allowCredentials</param-name>
+            <param-value>(true | false)</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowOrigin</param-name>
+            <param-value>[one or more domains | ip addresses]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowHeaders</param-name>
+            <param-value>[one or more request header names]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowMethods</param-name>
+            <param-value>[one or more request methods]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>exposeHeaders</param-name>
+            <param-value>[one or more header names to expose]</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+    	<filter-name>CorsFilter</filter-name>
+        <url-pattern>(the path pattern to handle, normally /**)</url-pattern>
+    </filter-mapping>
+</web-app>
+```
+
+如果您使用 **Spring Framework** 进行开发，那么只需要将这个 CorsFilter 注册到 **Spring** 容器中并将其 Order 调整为最先，即可完成配置。
 
 ## Web Dev Spring Boot Starter
 
+该 SpringBoot Starter 集成了 Simple JWT 与 Web Dev Suite ，可以将这两个模块中的配置迁移到 SpringBoot 的 `application.yml` 或 `application.properties` 文件中。
 
+# 如何使用这些模块？
 
+##  前提要求
+
+由于这些模块使用了 **Spring Framework** 6.x 版本以及 **SpringBoot 3.x** 版本，因此你需要 **JDK 17 或者更高版本**来运行它。如果你想在 JDK 16 或更早版本的 JDK 中使用，请查看我们的 3.x 版本。
+
+## 安装方式
+
+### 使用 Maven 的用户
+
+通过将如下代码添加到 `pom.xml` 文件中的 `<dependencies>` 节点中，并运行导入程序，Maven 会自动将打包好的 jar 文件下载到您的本地 maven 仓库中并完成导入。
+
+```xml
+<dependency>
+	<groupId>cn.vorbote</groupId>
+    <artifactId>(module-name)</artifactId>
+    <version>4.0.0</version>
+</dependency>
+```
+
+### 使用 Gradle 的用户
+
+通过将如下代码添加到 `build.gradle` 文件中的 `dependencies` 节点中，并运行导入程序，Maven 会自动将打包好的 jar 文件下载到您的本地 maven 仓库中并完成导入。
+
+```groovy
+implementation 'cn.vorbote:<module-name>:4.0.0'
+```
+
+# 如何帮助我们？
+
+当你在使用模块的时候发现了任何我们模块的问题，请放心大胆的[提交GitHub Issue]([New Issue · zihluwang/vorbote-framework (github.com)](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bug--.md&title=[BUG]))。当然，如果您可以自己解决这个问题，我们也很期待收到您的 Pull Request。

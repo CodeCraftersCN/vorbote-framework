@@ -299,7 +299,90 @@ The required change is shown in the code above and is tagged with the number **(
 
 ## Web Dev Suite
 
+This module is dedicated to providing a comfortable Java Web development experience for all developers.
 
+### Package `constants`
+
+It contains web response codes commonly used in web development and is provided in the form of enumerated data for developers to use.
+
+### Package `filter`
+
+#### `CorsFilter`
+
+During the development process, we have found that many developers often fail to obtain the data they need due to [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) policy that made the browser cancelled the data fetching process. With this `CorsFilter`, developers can easily solve this problem.
+
+##### The way to use
+
+If you develop your web app on `Tomcat` server directly, you could add thest configuration to file `/WEB-INF/web.xml` and made this filter be the **first** filter configuration.
+
+```xml
+<!-- As the angle brackets have a special meaning in the xml code, the required fields have been replaced with round brackets. -->
+<web-app>
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>cn.vorbote.web.filter.CorsFilter</filter-class>
+        <init-param>
+            <param-name>allowCredentials</param-name>
+            <param-value>(true | false)</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowOrigin</param-name>
+            <param-value>[one or more domains | ip addresses]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowHeaders</param-name>
+            <param-value>[one or more request header names]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowMethods</param-name>
+            <param-value>[one or more request methods]</param-value>
+        </init-param>
+        <init-param>
+            <param-name>exposeHeaders</param-name>
+            <param-value>[one or more header names to expose]</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+    	<filter-name>CorsFilter</filter-name>
+        <url-pattern>(the path pattern to handle, normally /**)</url-pattern>
+    </filter-mapping>
+</web-app>
+```
+
+If you are developing this app with **Spring Framework**, then you can register this filter into the **Spring** container and set its order to the first to setup.
 
 ## Web Dev Spring Boot Starter
 
+This SpringBoot Starter integrated **Simple JWT** and **Web Dev Suite**, and can move all the configurations into `application.yml` file or `application.properties` file.
+
+# How to use these module?
+
+##  Prerequisites
+
+Due to the use of version 6.x of `Spring Framework` and version 3.x of `SpringBoot`, you'll need **JDK 17** or **later** version to run it. If you want to use this framework in JDK 16 or previous version, please have a look at version 3.x of this framework.
+
+## Installation
+
+### For Maven Users
+
+It is quite simple. Add the following codes to the `<dependencies>` node in the pom.xml file and run import task, then you can use the module.
+
+```xml
+<dependency>
+	<groupId>cn.vorbote</groupId>
+    <artifactId>(module-name)</artifactId>
+    <version>4.0.0</version>
+</dependency>
+```
+
+### For Gradle Users
+
+Add the following codes to `dependencies` node in `build.gradle` file and run the import task, you can use the module.
+
+```groovy
+implementation 'cn.vorbote:vorbote-webdev-spring-boot-starter:4.0.0'
+```
+
+# How to help us?
+
+When you found some problems when using any of these modules, you can report to us by [submitting a GitHub Issue]([New Issue · zihluwang/vorbote-framework (github.com)](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bugreport-en-.md&title=[BUG])). Or if you are able to handle this problem by yourself, we are looking forward to receving your Pull Request!
