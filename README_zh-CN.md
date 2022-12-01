@@ -362,7 +362,7 @@ implementation 'cn.vorbote:<module-name>:4.0.0'
 
 ### 对于想将 `jar` 包添加到库文件夹的用户
 
-1. 从 GitHub Releases 下载最新版本的 `jar` 包。
+1. 从 [GitHub Releases](https://github.com/zihluwang/vorbote-framework/releases) 下载最新版本的 `jar` 包。
 2. 将 `jar` 包移动到您的库文件夹中。
 3. 将文件夹添加到 `Build Path`中。
 

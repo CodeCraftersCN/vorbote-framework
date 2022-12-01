@@ -385,7 +385,7 @@ implementation 'cn.vorbote:vorbote-webdev-spring-boot-starter:4.0.0'
 
 ### For Those Who Want to Add a Library Directory
 
-1. Download `jar` package from GitHub Releases.
+1. Download `jar` package from [GitHub Releases](https://github.com/zihluwang/vorbote-framework/releases) page.
 2. Move the `jar` package to your lib directory.
 3. Add the directory to `build path`.
 
