@@ -383,6 +383,18 @@ Add the following codes to `dependencies` node in `build.gradle` file and run th
 implementation 'cn.vorbote:vorbote-webdev-spring-boot-starter:4.0.0'
 ```
 
+### For Those Who Want to Add a Library Directory
+
+1. Download `jar` package from GitHub Releases.
+2. Move the `jar` package to your lib directory.
+3. Add the directory to `build path`.
+
+### For Those Who Want to Build
+
+1. Fork the repository.
+2. Make sure you have the environment of JDK 17 or later version and Maven 3.6.x or later version.
+3. Then you can build now.
+
 # How to help us?
 
 When you found some problems when using any of these modules, you can report to us by [submitting a GitHub Issue](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bugreport-en-.md&title=[BUG]). Or if you are able to handle this problem by yourself, we are looking forward to receiving your Pull Request!
