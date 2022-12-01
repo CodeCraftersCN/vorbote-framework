@@ -360,6 +360,18 @@ public final class User {
 implementation 'cn.vorbote:<module-name>:4.0.0'
 ```
 
+### 对于想将 `jar` 包添加到库文件夹的用户
+
+1. 从 GitHub Releases 下载最新版本的 `jar` 包。
+2. 将 `jar` 包移动到您的库文件夹中。
+3. 将文件夹添加到 `Build Path`中。
+
+### 对于想自己构建的用户
+
+1. Fork 这个仓库。
+2. 确保您拥有 JDK 17 或更高版本及 Maven 3.6.x 或更高版本。
+3. 使用命令 `mvn clean install -P snapshot` 进行构建并安装到本地 `maven` 仓库。
+
 # 如何帮助我们？
 
 当你在使用模块的时候发现了任何我们模块的问题，请放心大胆的[提交GitHub Issue](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bug--.md&title=[BUG])
