@@ -136,7 +136,7 @@ public final class HashUtil {
      * @param key    The key to encrypt the string.
      * @return The encrypted String by stream.
      */
-    public static byte[] encryptToByteStream(Hash method, String data, String key) {
+    public static byte[] encryptToByteStream(Hash method, String key, String data) {
         if (method != Hash.RC4)
             throw new UnsupportedHashAlgorithmException("This algorithm is unsupported yet.");
         if (data == null || key == null) {
@@ -158,11 +158,7 @@ public final class HashUtil {
         if (data == null || key == null) {
             return null;
         }
-        return castToHexString(
-                asString(
-                        Objects.requireNonNull(encryptToByteStream(Hash.RC4, data, key))
-                )
-        );
+        return castToHexString(asString(Objects.requireNonNull(encryptToByteStream(Hash.RC4, key, data))));
 
     }
 
