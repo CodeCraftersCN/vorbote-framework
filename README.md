@@ -5,7 +5,7 @@
 [![available at maven central](https://badgen.net/badge/available%20at/maven%20central/orange?icon=maven)](https://repo1.maven.org/maven2/cn/vorbote)
 [![version 4.0.0](https://badgen.net/badge/version/4.0.0/red)](https://github.com/vorbote/vorbote-framework/releases/tag/v4.0.0)
 
-> You could also read the **CHINESE** version of [README](README_zh-CN.md)
+> 中文版请[点击这里](README_zh-CN.md)
 
 ## Core
 
