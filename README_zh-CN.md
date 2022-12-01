@@ -362,4 +362,5 @@ implementation 'cn.vorbote:<module-name>:4.0.0'
 
 # 如何帮助我们？
 
-当你在使用模块的时候发现了任何我们模块的问题，请放心大胆的[提交GitHub Issue]([New Issue · zihluwang/vorbote-framework (github.com)](https://github.com/zihluwang/vorbote-framework/issues/new?assignees=theodorehills&labels=bug&template=bug--.md&title=[BUG]))。当然，如果您可以自己解决这个问题，我们也很期待收到您的 Pull Request。
+当你在使用模块的时候发现了任何我们模块的问题，请放心大胆的[提交GitHub Issue](https%3A%2F%2Fgithub.com%2Fzihluwang%2Fvorbote-framework%2Fissues%2Fnew%3Fassignees%3Dtheodorehills%26labels%3Dbug%26template%3Dbug--.md%26title%3D%5BBUG%5D)
+。当然，如果您可以自己解决这个问题，我们也很期待收到您的 Pull Request。
