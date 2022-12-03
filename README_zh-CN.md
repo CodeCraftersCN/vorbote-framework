@@ -346,9 +346,9 @@ public final class User {
 
 ```xml
 <dependency>
-	<groupId>cn.vorbote</groupId>
-    <artifactId>(module-name)</artifactId>
-    <version>4.0.0</version>
+  <groupId>cn.vorbote</groupId>
+  <artifactId>(module-name)</artifactId>
+  <version>4.0.0</version>
 </dependency>
 ```
 

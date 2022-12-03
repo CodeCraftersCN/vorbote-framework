@@ -393,7 +393,7 @@ implementation 'cn.vorbote:vorbote-webdev-spring-boot-starter:4.0.0'
 
 1. Fork the repository.
 2. Make sure you have the environment of JDK 17 or later version and Maven 3.6.x or later version.
-3. Run the command `mvn clean install -P snapshot` to install the lib to local `maven` repository。
+3. Run the command `mvn clean install -P snapshot` to install the lib to local `maven` repository.
 
 # How to help us?
 
