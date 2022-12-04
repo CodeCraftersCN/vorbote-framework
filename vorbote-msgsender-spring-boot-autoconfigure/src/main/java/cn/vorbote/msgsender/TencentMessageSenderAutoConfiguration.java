@@ -4,6 +4,7 @@ import cn.vorbote.message.auth.UserProfile;
 import cn.vorbote.message.sender.tencent.TencentSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,10 +34,18 @@ public class TencentMessageSenderAutoConfiguration {
 
     private ObjectMapper objectMapper;
 
+    private OkHttpClient okHttpClient;
+
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
         log.debug("Setting ObjectMapper for Tencent Sender.");
         this.objectMapper = objectMapper;
+    }
+
+    @Autowired
+    public void setOkHttpClient(OkHttpClient okHttpClient) {
+        log.debug("Setting OkHttpClient for Tencent Sender.");
+        this.okHttpClient = okHttpClient;
     }
 
     @Bean
@@ -45,7 +54,8 @@ public class TencentMessageSenderAutoConfiguration {
                 senderProperties.getSign(),
                 senderProperties.getAppId(),
                 UserProfile.createProfile(senderProperties.getSecretId(), senderProperties.getSecretKey()),
-                objectMapper
+                objectMapper,
+                okHttpClient
         );
     }
 }
