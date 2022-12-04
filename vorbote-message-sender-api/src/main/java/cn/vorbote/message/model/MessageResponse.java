@@ -1,11 +1,18 @@
 package cn.vorbote.message.model;
 
+import lombok.*;
+import lombok.experimental.Accessors;
+
 /**
  * MessageResponse<br>
  * Created at 30/10/2022 00:34
  *
  * @author vorbote
  */
+@Getter
+@ToString
+@EqualsAndHashCode
+@Accessors(chain = true)
 public final class MessageResponse {
 
     private final String message;

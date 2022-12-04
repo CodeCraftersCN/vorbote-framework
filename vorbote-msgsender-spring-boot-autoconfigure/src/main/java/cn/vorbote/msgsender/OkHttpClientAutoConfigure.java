@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * OkHttpClientAutoConfigure<br>
+ * OkHttpClientAutoConfigure, for inject an {@code OkHttpClient} to Spring container.
+ * <p>
  * Created at 04/12/2022 14:44
  *
  * @author vorbote
