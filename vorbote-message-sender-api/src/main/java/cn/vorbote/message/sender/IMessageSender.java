@@ -1,9 +1,12 @@
 package cn.vorbote.message.sender;
 
+import cn.vorbote.message.configurations.IRegion;
 import cn.vorbote.message.model.BatchMessageRequest;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.io.IOException;
 
 /**
  * IMessage Sender interface.<br>
@@ -21,7 +24,7 @@ public interface IMessageSender<T> {
      * @throws JsonProcessingException ObjectMapper could make this exception because
      *                                 of the data is not serializable.
      */
-    MessageResponse send(MessageRequest<T> request) throws JsonProcessingException;
+    MessageResponse send(MessageRequest<T> request) throws IOException;
 
     /**
      * Send several messages to multiple recipients.

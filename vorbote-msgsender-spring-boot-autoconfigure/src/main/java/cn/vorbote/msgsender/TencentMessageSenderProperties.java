@@ -1,6 +1,6 @@
 package cn.vorbote.msgsender;
 
-import cn.vorbote.message.config.TencentRegion;
+import cn.vorbote.message.sender.tencent.config.TencentRegion;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

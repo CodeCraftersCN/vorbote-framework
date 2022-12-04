@@ -1,5 +1,6 @@
 package cn.vorbote.msgsender;
 
+import cn.vorbote.message.auth.UserProfile;
 import cn.vorbote.message.sender.tencent.TencentSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +41,11 @@ public class TencentMessageSenderAutoConfiguration {
 
     @Bean
     public TencentSender tencentSender() {
-        return new TencentSender(senderProperties.getRegion(),
+        return new TencentSender(
                 senderProperties.getSign(),
                 senderProperties.getAppId(),
-                senderProperties.getSecretId(),
-                senderProperties.getSecretKey(),
-                objectMapper);
+                UserProfile.createProfile(senderProperties.getSecretId(), senderProperties.getSecretKey()),
+                objectMapper
+        );
     }
 }

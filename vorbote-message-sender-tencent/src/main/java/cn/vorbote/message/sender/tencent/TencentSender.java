@@ -1,24 +1,32 @@
 package cn.vorbote.message.sender.tencent;
 
 import cn.vorbote.core.exceptions.NotImplementedException;
-import cn.vorbote.message.config.TencentRegion;
+import cn.vorbote.core.time.DateTime;
+import cn.vorbote.message.auth.UserProfile;
 import cn.vorbote.message.model.BatchMessageRequest;
 import cn.vorbote.message.model.MessageRequest;
 import cn.vorbote.message.model.MessageResponse;
 import cn.vorbote.message.sender.IMessageSender;
-import cn.vorbote.message.util.JacksonSerializer;
+import cn.vorbote.message.sender.tencent.config.TencentConfig;
+import cn.vorbote.message.sender.tencent.config.TencentRegion;
+import cn.vorbote.message.sender.tencent.models.SendMessageRequest;
+import cn.vorbote.message.sender.tencent.models.SendMessageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.sms.v20210111.SmsClient;
-import com.tencentcloudapi.sms.v20210111.models.SendSmsRequest;
-import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * TencentSender<br>
@@ -29,51 +37,76 @@ import java.util.List;
 @Slf4j
 public final class TencentSender implements IMessageSender<List<String>> {
 
-    private final SmsClient client;
+    private final UserProfile userProfile;
 
     private final String appId;
 
     private final String sign;
 
-    private final JacksonSerializer jacksonSerializer;
+    private final ObjectMapper objectMapper;
+
+    private final OkHttpClient okHttpClient;
+
+    // ********************************
+    // region constructors
 
     /**
      * Generate an SMS Sender which is using Tencent Cloud as the service provider.
      *
-     * @param appId     The app id.
-     * @param keyId     The key id.
-     * @param keySecret The key secret.
-     * @see TencentSender#TencentSender(TencentRegion, String, String, String, String, ObjectMapper)
+     * @param sign         the sign of messages
+     * @param appId        the app id
+     * @param objectMapper jackson ObjectMapper
      */
-    public TencentSender(TencentRegion region, String sign, String appId, String keyId, String keySecret) {
-        this(region, sign, appId, keyId, keySecret, new ObjectMapper());
-    }
-
-    /**
-     * Generate an SMS Sender which is using Tencent Cloud as the service provider.
-     *
-     * @param appId        The app id.
-     * @param keyId        The key id.
-     * @param keySecret    The key secret.
-     * @param objectMapper Jackson ObjectMapper Utility.
-     */
-    public TencentSender(TencentRegion region, String sign, String appId, String keyId, String keySecret, ObjectMapper objectMapper) {
+    public TencentSender(String sign, String appId, UserProfile userProfile, ObjectMapper objectMapper, OkHttpClient okHttpClient) {
         this.sign = sign;
-        var cred = new Credential(keyId, keySecret);
-
-        var httpProfile = new HttpProfile();
-        httpProfile.setReqMethod("POST");
-        httpProfile.setConnTimeout(60);
-        httpProfile.setEndpoint("sms.tencentcloudapi.com");
-
-        var clientProfile = new ClientProfile();
-        clientProfile.setSignMethod("HmacSHA256");
-        clientProfile.setHttpProfile(httpProfile);
-
-        this.client = new SmsClient(cred, region.getRegionId(), clientProfile);
         this.appId = appId;
-        this.jacksonSerializer = JacksonSerializer.getJacksonSerializer(objectMapper);
+        this.objectMapper = objectMapper;
+        this.userProfile = userProfile;
+        this.okHttpClient = okHttpClient;
     }
+
+    public TencentSender(String sign, String appId, UserProfile userProfile, ObjectMapper objectMapper) {
+        this(sign, appId, userProfile, objectMapper, new OkHttpClient());
+    }
+
+    public TencentSender(String sign, String appId, UserProfile userProfile, OkHttpClient okHttpClient) {
+        this(sign, appId, userProfile, new ObjectMapper(), okHttpClient);
+    }
+
+    public TencentSender(String sign, String appId, UserProfile userProfile) {
+        this(sign, appId, userProfile, new ObjectMapper(), new OkHttpClient());
+    }
+    // endregion
+    // ********************************
+
+    // ********************************
+    // region private methods
+
+    private byte[] hmac256(byte[] key, String message) {
+        try {
+            final var mac = Mac.getInstance("HmacSHA256");
+            final var secretKeySpec = new SecretKeySpec(key, mac.getAlgorithm());
+            mac.init(secretKeySpec);
+            return mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException | InvalidKeyException exception) {
+            log.error(exception.getMessage());
+            return null;
+        }
+    }
+
+    private String sha256Hex(String s) {
+        try {
+            final var md = MessageDigest.getInstance("SHA-256");
+            var d = md.digest(s.getBytes(StandardCharsets.UTF_8));
+            return DatatypeConverter.printHexBinary(d).toLowerCase();
+        } catch (NoSuchAlgorithmException exception) {
+            log.error(exception.getMessage());
+            return null;
+        }
+    }
+
+    // endregion
+    // ********************************
 
     /**
      * Send a SMS.
@@ -83,25 +116,100 @@ public final class TencentSender implements IMessageSender<List<String>> {
      * @throws JsonProcessingException ObjectMapper could make this exception because
      *                                 of the data is not serializable.
      */
-    @Override
-    public MessageResponse send(MessageRequest<List<String>> request) throws JsonProcessingException {
-        var req = new SendSmsRequest();
-        req.setSmsSdkAppId(appId);
-        req.setSignName(sign);
-        req.setTemplateId(request.templateId());
-        req.setTemplateParamSet(request.params().toArray(String[]::new));
-        req.setPhoneNumberSet(resolve(request.receiver()));
+    public MessageResponse send(TencentRegion region, MessageRequest<List<String>> request) throws IOException {
+        final var now = DateTime.now();
+        final var date = now.pattern("yyyy-MM-dd").toString();
 
-        SendSmsResponse resp = null;
-        try {
-            resp = client.SendSms(req);
-            var response = MessageResponse.initResponse(
-                    resp.getSendStatusSet()[0].getCode(), resp.getSendStatusSet()[0].getMessage());
-            log.debug("Sent sms via tencent cloud platform, response message is: {}", jacksonSerializer.serialize(response));
-            return response;
-        } catch (TencentCloudSDKException e) {
-            throw new RuntimeException(e);
+        // build the payload that will be uploaded to tencent servers
+        var payload = new SendMessageRequest()
+                .setAppId(appId)
+                .setSign(sign)
+                .setTemplateId(request.templateId())
+                .setParams(request.getParams())
+                .setReceivers(List.of(request.receiver()));
+
+        // joint the canonical request string
+        final var canonicalRequest = TencentConfig.SEND_METHOD + "\n" +
+                TencentConfig.CANONICAL_URI + "\n" +
+                TencentConfig.CANONICAL_QUERY_STRING + "\n" +
+                TencentConfig.CANONICAL_HEADERS + "\n" +
+                TencentConfig.SIGNED_HEADERS + "\n" +
+                sha256Hex(objectMapper.writeValueAsString(payload));
+
+        // joint the request string that need to be signed
+        var credentialScope = date + "/" + TencentConfig.SERVICE + "/" + "tc3_service";
+        var stringToSign = TencentConfig.ALGORITHM + "\n" +
+                now.unix() + "\n" +
+                credentialScope + "\n" +
+                sha256Hex(canonicalRequest); // hashed canonical request
+
+        // calculate signature
+        var secretDate = hmac256(("TC3" + userProfile.secretKey()).getBytes(StandardCharsets.UTF_8), date);
+        var secretService = hmac256(secretDate, TencentConfig.SERVICE);
+        var secretSigning = hmac256(secretService, "tc3_request");
+        var signature = DatatypeConverter.printHexBinary(hmac256(secretSigning, stringToSign)).toLowerCase();
+
+        // joint the header - authorization
+        final var authorization = TencentConfig.ALGORITHM + " " +
+                "Credential=" + userProfile.secretId() + "/" + credentialScope + ", " +
+                "SignedHeaders=" + TencentConfig.SIGNED_HEADERS + ", " + "Signature=" + signature;
+
+        // use okhttp send a request
+        var requestEntity = new Request.Builder()
+                .url("https://" + TencentConfig.HOST)
+                .addHeader("Authorization", authorization)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .addHeader("X-TC-Action", TencentConfig.ACTION)
+                .addHeader("X-TC-Timestamp", String.valueOf(now.unix()))
+                .addHeader("X-TC-Version", TencentConfig.VERSION)
+                .addHeader("X-TC-Region", region.getRegion())
+                .post(RequestBody.create(objectMapper.writeValueAsString(payload),
+                        MediaType.parse("application/json; charset=utf-8")))
+                .build();
+
+        MessageResponse messageResponse = null;
+
+        try (var response = okHttpClient.newCall(requestEntity).execute()) {
+            var json = objectMapper.readTree(Optional.of(response).map(Response::body).map(item -> {
+                try {
+                    return item.string();
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                    return null;
+                }
+            }).orElse("{}"));
+
+            if (json.has("Response")) {
+                // objectMapper.readValue(json.get("Response").toString(), SendMessageResponse.class);
+                var resp = Optional.ofNullable(json.get("Response"))
+                        .map(JsonNode::toString)
+                        .map((item) -> {
+                            try {
+                                return objectMapper.readValue(item, SendMessageResponse.class);
+                            } catch (JsonProcessingException e) {
+                                log.error(e.getMessage());
+                                return null;
+                            }
+                        })
+                        .map(SendMessageResponse::getSendStatusSet)
+                        .map((item) -> item.get(0))
+                        .orElse(null);
+
+                if (resp != null) {
+                    log.trace("SMS Request has been sent, response message from server is {}, and code is {}",
+                            resp.getMessage(), resp.getCode());
+                    messageResponse = MessageResponse.initResponse(resp.getCode(), resp.getMessage());
+                }
+
+            }
         }
+
+        return messageResponse;
+    }
+
+    @Override
+    public MessageResponse send(MessageRequest<List<String>> request) throws IOException {
+        return send(TencentRegion.GUANGZHOU, request);
     }
 
     /**
@@ -114,7 +222,7 @@ public final class TencentSender implements IMessageSender<List<String>> {
     @Deprecated
     public MessageResponse batchSend(BatchMessageRequest<List<String>> request) {
         throw new NotImplementedException("""
-                This feature will not be implemented as the AliCloud Platform \
+                This feature will not be implemented as the Tencent Cloud Platform \
                 Send SMS interface supports the transmission of single or multiple SMS recipients.""");
     }
 
