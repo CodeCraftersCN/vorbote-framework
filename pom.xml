@@ -24,7 +24,6 @@
         <module>vorbote-webdev-spring-boot-starter</module>
         <module>vorbote-webdev-spring-boot-autoconfigure</module>
         <module>vorbote-message-sender-api</module>
-        <module>vorbote-message-sender-aliyun</module>
         <module>vorbote-message-sender-tencent</module>
         <module>vorbote-msgsender-spring-boot-autoconfigure</module>
         <module>vorbote-msgsender-spring-boot-starter</module>
@@ -125,12 +124,6 @@
             <dependency>
                 <groupId>cn.vorbote</groupId>
                 <artifactId>vorbote-message-sender-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cn.vorbote</groupId>
-                <artifactId>vorbote-message-sender-aliyun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
