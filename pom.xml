@@ -28,6 +28,7 @@
         <module>vorbote-msgsender-spring-boot-autoconfigure</module>
         <module>vorbote-msgsender-spring-boot-starter</module>
         <module>vorbote-ical</module>
+        <module>vorbote-message-sender-aliyun</module>
     </modules>
 
     <developers>
