@@ -10,7 +10,7 @@
 - 移除被弃用方法 `cn.vorbote.simplejwt.AccessKeyUtil#renew(String token, int expireAfter)`。
 - 修改方法 `cn.vorbote.core.utils.HashUtil#encryptToByteStream(Hash method, String key, String data)` 参数列表的顺序。
 
-## [4.1.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0) - 2022-12-04
+## [4.0.2](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.2) - 2022-12-05
 
-- 由于阿里云短信签名方法过于复杂，因此**暂时**移除了阿里云短信服务。
+- 移除了阿里云官方 SDK 并迁移到使用 OkHttpClient 发送 Web API。
 - 移除了腾讯云官方 SDK 并迁移到使用 OkHttpClient 发送 Web API。

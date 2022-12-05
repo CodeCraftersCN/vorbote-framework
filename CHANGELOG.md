@@ -10,7 +10,7 @@
 - Removed deprecated method `cn.vorbote.simplejwt.AccessKeyUtil#renew(String token, int expireAfter)`
 - Changed the order of the parameters in method `cn.vorbote.core.utils.HashUtil#encryptToByteStream(Hash method, String key, String data)`
 
-## [4.1.0.PRE](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0.PRE) - 2022-12-04
+## [4.0.2](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.2) - 2022-12-05
 
-- The signature method of Aliyun SMS Service is too complicated, so the Aliyun SMS Service has been removed for the time being.
+- Removed the official Aliyun SDK and migrated to using OkHttpClient to send the Web API.
 - Removed the official Tencent Cloud SDK and migrated to using OkHttpClient to send the Web API.
