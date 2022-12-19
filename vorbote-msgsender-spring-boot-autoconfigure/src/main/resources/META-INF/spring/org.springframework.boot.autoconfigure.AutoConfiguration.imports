@@ -1,0 +1,3 @@
+cn.vorbote.msgsender.AliyunMessageSenderAutoConfigure
+cn.vorbote.msgsender.TencentMessageSenderAutoConfiguration
+cn.vorbote.msgsender.OkHttpClientAutoConfigure

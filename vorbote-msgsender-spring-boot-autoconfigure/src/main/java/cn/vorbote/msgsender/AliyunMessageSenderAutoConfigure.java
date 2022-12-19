@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * This is a auto configurer to create a {@link AliyunSender} instance.<br>
+ * This is an auto configurer to create a {@link AliyunSender} instance.<br>
  * Created at 04/09/2022 18:47
  *
  * @author theod
