@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Fixed an issue with Spring Boot Starter not being automatically configured in `4.0.0 - 4.0.2` versions.
+- Fixed the issue that all components cannot being auto configured when using all Spring Boot Starters.
 
 > Spring Team deprecated to configure an AutoConfigurer by specify it in the file `META-INF/spring.factories` in Spring 
 > Boot 2.7.x and removed it in version 3.x.
