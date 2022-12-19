@@ -19,7 +19,8 @@ import java.util.Optional;
 @Slf4j
 public class CorsFilter implements Filter {
 
-    private final static String REGEX_URL = "(https?://(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()!@:%_+.~#?&/=]*))|(\\*)|(null)";
+    private final static String REGEX_URL =
+            "(https?://(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()!@:%_+.~#?&/=]*))|(\\*)|(null)";
 
     private final static List<String> ALL_METHODS = Arrays.asList("GET", "HEAD", "POST", "PUT",
             "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH");
@@ -131,7 +132,7 @@ public class CorsFilter implements Filter {
      * @param array The {@code String} array.
      * @return A {@code String} with the format of MDN specified header value.
      */
-    protected static String fromArray(String[] array) {
+    private static String fromArray(String[] array) {
         StringBuilder builder = new StringBuilder();
         if (array != null) {
             for (String item : array) {

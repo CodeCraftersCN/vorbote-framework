@@ -32,6 +32,12 @@
 
         <dependency>
             <groupId>cn.vorbote</groupId>
+            <artifactId>vorbote-message-sender-aliyun</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.vorbote</groupId>
             <artifactId>vorbote-message-sender-tencent</artifactId>
             <optional>true</optional>
         </dependency>

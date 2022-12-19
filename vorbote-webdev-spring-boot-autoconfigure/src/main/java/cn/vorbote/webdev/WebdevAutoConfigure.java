@@ -4,7 +4,6 @@ import cn.vorbote.simplejwt.AccessKeyUtil;
 import cn.vorbote.simplejwt.choices.JwtAlgorithm;
 import cn.vorbote.web.filter.CorsFilter;
 import cn.vorbote.webdev.cors.CorsProperties;
-import cn.vorbote.webdev.encoding.EncodingProperties;
 import cn.vorbote.webdev.jwt.JwtProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * This is to autoconfigure.
+ * Web Dev Suite auto configurer.
  *
  * @author vorbote thills@vorbote.cn
  */
 @Slf4j
 @Configuration
-@EnableConfigurationProperties(value = {JwtProperties.class, CorsProperties.class, EncodingProperties.class})
+@EnableConfigurationProperties(value = {JwtProperties.class, CorsProperties.class})
 public class WebdevAutoConfigure {
 
     private final JwtProperties jwtProperties;
@@ -36,7 +35,7 @@ public class WebdevAutoConfigure {
     @Bean
     @ConditionalOnProperty(name = "vorbote.web-dev.jwt.enabled", havingValue = "true")
     public AccessKeyUtil accessKeyUtil() {
-        log.debug("Injecting accessKeyUtil...");
+        log.debug("Building JSON Web Token handler.");
         JwtProperties info = this.jwtProperties;
         JwtAlgorithm algorithm = info.getAlgorithm();
         if (algorithm == null) {
@@ -48,9 +47,9 @@ public class WebdevAutoConfigure {
     @Bean
     @ConditionalOnProperty(name = "vorbote.web-dev.cors.enabled", havingValue = "true")
     public CorsFilter corsFilter() {
-        log.debug("Injecting CORS Filter...");
+        log.debug("Building CORS Filter...");
         if (corsProperties.getAllowCredentials() == null) {
-            log.warn("Allow-credentials had been set to null, will set to false by default.");
+            log.warn("Detected that the property Allow-Credentials is null, it will be set to false by default.");
             corsProperties.setAllowCredentials(false);
         }
         return new CorsFilter(corsProperties.getAllowCredentials(), corsProperties.getAllowOrigin(),

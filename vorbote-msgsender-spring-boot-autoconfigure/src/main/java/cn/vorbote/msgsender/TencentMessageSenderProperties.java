@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * TencentMessageSenderProperties<br>
+ * These are the properties to define a {@link cn.vorbote.message.sender.tencent.TencentSender} instance.<br>
  * Created at 04/09/2022 18:46
  *
  * @author theod

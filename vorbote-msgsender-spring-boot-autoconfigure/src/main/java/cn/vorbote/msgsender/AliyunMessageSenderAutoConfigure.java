@@ -1,7 +1,7 @@
 package cn.vorbote.msgsender;
 
 import cn.vorbote.message.auth.UserProfile;
-import cn.vorbote.message.sender.tencent.TencentSender;
+import cn.vorbote.message.sender.aliyun.AliyunSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -13,22 +13,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * This is a auto configurer to create a {@link TencentSender} instance.<br>
+ * This is a auto configurer to create a {@link AliyunSender} instance.<br>
  * Created at 04/09/2022 18:47
  *
  * @author theod
  */
 @Slf4j
 @Configuration
-@EnableConfigurationProperties(value = {TencentMessageSenderProperties.class})
-@ConditionalOnClass(TencentSender.class)
-@ConditionalOnProperty(value = "vorbote.msg-sender.tencent.enabled", havingValue = "true")
-public class TencentMessageSenderAutoConfiguration {
+@EnableConfigurationProperties(value = {AliyunMessageSenderProperties.class})
+@ConditionalOnClass(AliyunSender.class)
+@ConditionalOnProperty(value = "vorbote.msg-sender.aliyun.enabled", havingValue = "true")
+public class AliyunMessageSenderAutoConfigure {
 
-    private final TencentMessageSenderProperties senderProperties;
+    private final AliyunMessageSenderProperties senderProperties;
 
     @Autowired
-    public TencentMessageSenderAutoConfiguration(TencentMessageSenderProperties senderProperties) {
+    public AliyunMessageSenderAutoConfigure(AliyunMessageSenderProperties senderProperties) {
         this.senderProperties = senderProperties;
     }
 
@@ -38,24 +38,28 @@ public class TencentMessageSenderAutoConfiguration {
 
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
-        log.debug("Setting ObjectMapper for Tencent Sender.");
         this.objectMapper = objectMapper;
     }
 
     @Autowired
     public void setOkHttpClient(OkHttpClient okHttpClient) {
-        log.debug("Setting OkHttpClient for Tencent Sender.");
         this.okHttpClient = okHttpClient;
     }
 
+    /**
+     * Create a default Aliyun Sender with {@link ObjectMapper} instance in the SpringBoot and a new
+     * {@link OkHttpClient}.
+     *
+     * @return a default {@link AliyunSender} instance
+     */
     @Bean
-    public TencentSender tencentSender() {
-        return new TencentSender(
+    public AliyunSender aliyunSender() {
+        return new AliyunSender(
+                UserProfile.createProfile(
+                        senderProperties.getSecretId(),
+                        senderProperties.getSecretKey()),
                 senderProperties.getSign(),
-                senderProperties.getAppId(),
-                UserProfile.createProfile(senderProperties.getSecretId(), senderProperties.getSecretKey()),
                 objectMapper,
-                okHttpClient
-        );
+                okHttpClient);
     }
 }

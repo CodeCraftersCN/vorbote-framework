@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>vorbote-message-sender-aliyun</artifactId>
+    <name>VorBotE Framework :: Message Sender :: Aliyun Implementation</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

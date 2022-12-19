@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * <br>
+ * This class is to do some business assertions.
+ * <p>
+ * If the assertion is not passed, the util will throw a {@link BizException}
  * Created at 2022/2/22 22:22
  *
  * @author vorbote theodore0126@outlook.com
@@ -31,7 +33,7 @@ public final class BizAssert {
      * @param message      The exception message to use if the assertion fails.
      * @throws BizException If the text contains the substring.
      */
-    public static void doesNotContain(String textToSearch, String substring, String message) throws BizException {
+    public static void doesNotContain(String textToSearch, String substring, String message) {
         if (!StringUtil.isBlank(textToSearch) && textToSearch.contains(substring)) {
             throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
         }

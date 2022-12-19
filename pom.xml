@@ -47,9 +47,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/vorbote/vorbote-framework</url>
-        <connection>git@github.com:vorbote/vorbote-framework.git</connection>
-        <developerConnection>https://github.com/vorbote</developerConnection>
+        <url>https://github.com/zihluwang/vorbote-framework</url>
+        <connection>git@github.com:zihluwang/vorbote-framework.git</connection>
+        <developerConnection>https://github.com/zihluwang</developerConnection>
     </scm>
 
     <properties>
@@ -74,12 +74,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.11</version>
+            <version>1.4.5</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
+            <version>1.4.5</version>
         </dependency>
 
         <!--********************-->
@@ -125,6 +125,12 @@
             <dependency>
                 <groupId>cn.vorbote</groupId>
                 <artifactId>vorbote-message-sender-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.vorbote</groupId>
+                <artifactId>vorbote-message-sender-aliyun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -208,12 +214,6 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <scope>test</scope>
                 <version>${spring.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>2.9.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
