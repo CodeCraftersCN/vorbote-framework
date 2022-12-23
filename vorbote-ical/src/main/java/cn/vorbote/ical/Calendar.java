@@ -134,7 +134,7 @@ public final class Calendar {
      * @return A string includes all events in this calendar.
      */
     public String resolve() {
-        var events = new StringBuilder();
+        StringBuilder events = new StringBuilder();
         if (CollectionUtil.isNotEmpty(nodes)) {
             nodes.forEach(item -> events.append(item
                     .setDomainName(domainName)

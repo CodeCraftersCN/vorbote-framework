@@ -18,8 +18,7 @@ import java.util.List;
  *
  * @author vorbote
  */
-public abstract sealed class CalendarNode
-        permits Event {
+public abstract class CalendarNode {
 
     /**
      * <p>
@@ -260,7 +259,7 @@ public abstract sealed class CalendarNode
     // Protected methods
     //
     protected String resolveCategories() {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         if (CollectionUtil.isNotEmpty(categories)) {
             categories.forEach(item -> builder.append(item).append(","));
             return builder.substring(0, builder.length() - 1);
