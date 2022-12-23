@@ -12,7 +12,7 @@
 
     <groupId>cn.vorbote</groupId>
     <artifactId>vorbote-framework</artifactId>
-    <version>4.0.3</version>
+    <version>3.8.0</version>
     <packaging>pom</packaging>
     <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>
