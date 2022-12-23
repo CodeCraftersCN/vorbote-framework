@@ -1,5 +1,11 @@
 # 更新日志
 
+## [3.8.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v3.8.0) - 2022-12-23
+
+### 适配性调整
+
+- 适配使用 **JDK 8** 以及 **Spring Boot 2.7.x**
+
 ## [4.0.3](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.3) - 2022-12-19
 
 ### 修复

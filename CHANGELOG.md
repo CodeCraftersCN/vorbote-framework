@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [3.8.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v3.8.0) - 2022-12-23
+
+### Changes to compatibility
+
+- Compatible with **JDK 8** and **Spring Boot 2.7.x**
+
 ## [4.0.3](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.3) - 2022-12-19
 
 ### Fixed
