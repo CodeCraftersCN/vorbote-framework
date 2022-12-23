@@ -30,7 +30,7 @@ public final class BranchUtil<T> {
      * @return A BranchUtil instance that supports chain calls.
      */
     public static <T> BranchUtil<T> anyMatch(Boolean... booleans) {
-        var result = Arrays.stream(booleans)
+        boolean result = Arrays.stream(booleans)
                 .filter(Objects::nonNull)
                 .anyMatch(Boolean::booleanValue);
         return new BranchUtil<>(result);
@@ -47,7 +47,7 @@ public final class BranchUtil<T> {
      * @return A BranchUtil instance that supports chain calls.
      */
     public static <T> BranchUtil<T> allMatch(Boolean... booleans) {
-        var result = Arrays.stream(booleans)
+        boolean result = Arrays.stream(booleans)
                 .filter(Objects::nonNull)
                 .allMatch(Boolean::booleanValue);
         return new BranchUtil<>(result);
@@ -64,7 +64,7 @@ public final class BranchUtil<T> {
      * @return A BranchUtil instance that supports chain calls.
      */
     public static <T> BranchUtil<T> anyMatch(BooleanSupplier... booleanSuppliers) {
-        var result = Arrays.stream(booleanSuppliers)
+        boolean result = Arrays.stream(booleanSuppliers)
                 .filter(Objects::nonNull)
                 .anyMatch(BooleanSupplier::getAsBoolean);
         return new BranchUtil<>(result);
@@ -81,7 +81,7 @@ public final class BranchUtil<T> {
      * @return A BranchUtil instance that supports chain calls.
      */
     public static <T> BranchUtil<T> allMatch(BooleanSupplier... booleanSuppliers) {
-        var result = Arrays.stream(booleanSuppliers)
+        boolean result = Arrays.stream(booleanSuppliers)
                 .filter(Objects::nonNull)
                 .allMatch(BooleanSupplier::getAsBoolean);
         return new BranchUtil<>(result);

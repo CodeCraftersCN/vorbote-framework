@@ -108,21 +108,54 @@ public final class MapUtil {
 
                     // 判断类中对应字段的Class
                     switch (field.getGenericType().toString()) {
-                        case DT_SHORT, CLASS_SHORT -> entry.setValue(Short.parseShort(entryValue));
-                        case DT_INT, CLASS_INTEGER -> entry.setValue(Integer.parseInt(entryValue));
-                        case DT_LONG, CLASS_LONG -> entry.setValue(Long.parseLong(entryValue));
-                        case DT_FLOAT, CLASS_FLOAT -> entry.setValue(Float.parseFloat(entryValue));
-                        case DT_DOUBLE, CLASS_DOUBLE -> entry.setValue(Double.parseDouble(entryValue));
-                        case DT_CHAR, CLASS_CHAR -> entry.setValue(entryValue.charAt(0));
-                        case DT_BYTE, CLASS_BYTE -> entry.setValue(Byte.parseByte(entryValue));
-                        case DT_BOOL, CLASS_BOOL -> entry.setValue(Boolean.parseBoolean(entryValue));
-                        case CLASS_STRING -> entry.setValue(entryValue);
-                        case CLASS_BIG_DECIMAL -> entry.setValue(BigDecimal.valueOf(Double.parseDouble(entryValue)));
-                        case CLASS_DATE_TIME -> entry.setValue(new DateTime(Long.parseLong(entryValue)));
-                        case CLASS_DATE -> entry.setValue(new Date(Long.parseLong(entryValue)));
-                        default -> log.error("Unsupported Type or Class: {}", field.getGenericType());
+                        case DT_SHORT:
+                        case CLASS_SHORT:
+                            entry.setValue(Short.parseShort(entryValue));
+                            break;
+                        case DT_INT:
+                        case CLASS_INTEGER:
+                            entry.setValue(Integer.parseInt(entryValue));
+                            break;
+                        case DT_LONG:
+                        case CLASS_LONG:
+                            entry.setValue(Long.parseLong(entryValue));
+                            break;
+                        case DT_FLOAT:
+                        case CLASS_FLOAT:
+                            entry.setValue(Float.parseFloat(entryValue));
+                            break;
+                        case DT_DOUBLE:
+                        case CLASS_DOUBLE:
+                            entry.setValue(Double.parseDouble(entryValue));
+                            break;
+                        case DT_CHAR:
+                        case CLASS_CHAR:
+                            entry.setValue(entryValue.charAt(0));
+                            break;
+                        case DT_BYTE:
+                        case CLASS_BYTE:
+                            entry.setValue(Byte.parseByte(entryValue));
+                            break;
+                        case DT_BOOL:
+                        case CLASS_BOOL:
+                            entry.setValue(Boolean.parseBoolean(entryValue));
+                            break;
+                        case CLASS_STRING:
+                            entry.setValue(entryValue);
+                            break;
+                        case CLASS_BIG_DECIMAL:
+                            entry.setValue(BigDecimal.valueOf(Double.parseDouble(entryValue)));
+                            break;
+                        case CLASS_DATE_TIME:
+                            entry.setValue(new DateTime(Long.parseLong(entryValue)));
+                            break;
+                        case CLASS_DATE:
+                            entry.setValue(new Date(Long.parseLong(entryValue)));
+                            break;
+                        default:
+                            log.error("Unsupported Type or Class: {}", field.getGenericType());
 
-                        // System.err.println("Unsupported Type or Class");
+                            // System.err.println("Unsupported Type or Class");
                     }
 
                     // 设置值
