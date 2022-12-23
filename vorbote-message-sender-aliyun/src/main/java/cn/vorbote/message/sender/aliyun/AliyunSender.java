@@ -9,13 +9,16 @@ import cn.vorbote.message.sender.IMessageSender;
 import cn.vorbote.message.sender.aliyun.config.AliyunConfig;
 import cn.vorbote.message.sender.aliyun.config.AliyunRegion;
 import cn.vorbote.message.sender.aliyun.models.SendMessageResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.crypto.Mac;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -100,8 +103,8 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
      * @param value the url to encode
      * @return encoded string that matches url format.
      */
-    private static String specialUrlEncode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8)
+    private static String specialUrlEncode(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, "UTF-8")
                 .replace("+", "%20")
                 .replace("*", "%2A")
                 .replace("%7E", "~");
@@ -116,9 +119,9 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
      */
     private static String sign(String accessSecret, String stringToSign) {
         try {
-            var mac = Mac.getInstance("HmacSHA1");
+            Mac mac = Mac.getInstance("HmacSHA1");
             mac.init(new javax.crypto.spec.SecretKeySpec(accessSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
-            var signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
+            byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(signData);
         } catch (NoSuchAlgorithmException | InvalidKeyException exception) {
             log.error(exception.getMessage());
@@ -141,10 +144,10 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
      * @see Call#execute()
      */
     public MessageResponse send(AliyunRegion region, MessageRequest<Map<String, Object>> request) throws IOException {
-        final var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         simpleDateFormat.setTimeZone(new SimpleTimeZone(0, "GMT"));// 这里一定要设置GMT时区
 
-        var params = new TreeMap<String, String>() {{
+        Map<String, String> params = new TreeMap<String, String>() {{
             // following codes are system parameters
             put("SignatureMethod", AliyunConfig.SIGNATURE_METHOD);
             put("SignatureNonce", UUID.randomUUID().toString());
@@ -164,32 +167,32 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
         }};
 
         // build the string to be signed
-        var iterator = params.keySet().iterator();
-        var sortedQueryStringBuilder = new StringBuilder();
+        Iterator<String> iterator = params.keySet().iterator();
+        StringBuilder sortedQueryStringBuilder = new StringBuilder();
         while (iterator.hasNext()) {
-            var key = iterator.next();
+            String key = iterator.next();
             sortedQueryStringBuilder.append("&").append(specialUrlEncode(key)).append("=").append(specialUrlEncode(params.get(key)));
         }
 
         // remove the fist and(&) sign at the lead of the string
-        var stringToSign = "GET" + "&" +
+        String stringToSign = "GET" + "&" +
                 specialUrlEncode("/") + "&" +
                 specialUrlEncode(sortedQueryStringBuilder.substring(1));
         log.trace("Building the string to sign, value is [{}].", stringToSign);
 
-        var signature = specialUrlEncode(sign(userProfile.secretKey() + "&", stringToSign));
-        var url = "https://" + region.getEndpoint() + // host
+        String signature = specialUrlEncode(sign(userProfile.secretKey() + "&", stringToSign));
+        String url = "https://" + region.getEndpoint() + // host
                 "/?Signature=" + signature + // signature
                 sortedQueryStringBuilder; // request params
 
         log.trace("Sending request to {}", url);
-        var webCall = new Request.Builder()
+        Request webCall = new Request.Builder()
                 .url(url)
                 .get()
                 .build();
-        MessageResponse messageResponse = null;
-        try (var webResp = okHttpClient.newCall(webCall).execute()) {
-            var jsonResp = Optional.of(webResp)
+        MessageResponse messageResponse;
+        try (Response webResp = okHttpClient.newCall(webCall).execute()) {
+            String jsonResp = Optional.of(webResp)
                     .map(Response::body)
                     .map((item) -> {
                         try {
@@ -202,7 +205,7 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
                     .orElse("{}");
             log.trace(jsonResp);
 
-            var resp = objectMapper.readValue(jsonResp, SendMessageResponse.class);
+            SendMessageResponse resp = objectMapper.readValue(jsonResp, SendMessageResponse.class);
             log.trace("Response entity: {}", resp);
             messageResponse = MessageResponse.initResponse(resp.getCode(), resp.getMessage());
         }
@@ -236,8 +239,6 @@ public final class AliyunSender implements IMessageSender<Map<String, Object>> {
      */
     @Override
     public MessageResponse batchSend(BatchMessageRequest<Map<String, Object>> request) {
-        throw new NotImplementedException("""
-                This method is not implemented yet. Please hold on for several versions.
-                """);
+        throw new NotImplementedException("This method is not implemented yet. Please hold on for several versions.");
     }
 }

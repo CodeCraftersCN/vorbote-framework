@@ -109,13 +109,18 @@ public class AccessKeyUtil {
         String token;
 
         switch (algorithm) {
-            case HS256 -> token = builder.sign(Algorithm.HMAC256(secret));
-            case HS384 -> token = builder.sign(Algorithm.HMAC384(secret));
-            case HS512 -> token = builder.sign(Algorithm.HMAC512(secret));
-            default -> {
+            case HS256:
+                token = builder.sign(Algorithm.HMAC256(secret));
+                break;
+            case HS384:
+                token = builder.sign(Algorithm.HMAC384(secret));
+                break;
+            case HS512:
+                token = builder.sign(Algorithm.HMAC512(secret));
+                break;
+            default:
                 token = builder.sign(Algorithm.HMAC256(secret));
                 log.error("This algorithm is not supported yet, will use HMAC256 by default.");
-            }
         }
 
         return token;
@@ -182,24 +187,24 @@ public class AccessKeyUtil {
                 // 经过实验，无法通过动态转换进行 withClaim 运算，因此只能一个一个进行 instanceof 运算
                 // 并进行强制转换
                 // region 强制转换
-                if (fieldValue instanceof Boolean v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof Double v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof Float v) {
-                    builder.withClaim(fieldName, v.doubleValue());
-                } else if (fieldValue instanceof Integer v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof Long v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof String v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof Date v) {
-                    builder.withClaim(fieldName, v);
-                } else if (fieldValue instanceof DateTime v) {
-                    builder.withClaim(fieldName, v.toDate());
-                } else if (fieldValue instanceof List<?> v) {
-                    builder.withClaim(fieldName, v);
+                if (fieldValue instanceof Boolean) {
+                    builder.withClaim(fieldName, (Boolean) fieldValue);
+                } else if (fieldValue instanceof Double) {
+                    builder.withClaim(fieldName, (Double) fieldValue);
+                } else if (fieldValue instanceof Float) {
+                    builder.withClaim(fieldName, ((Float) fieldValue).doubleValue());
+                } else if (fieldValue instanceof Integer) {
+                    builder.withClaim(fieldName, (Integer) fieldValue);
+                } else if (fieldValue instanceof Long) {
+                    builder.withClaim(fieldName, (Long) fieldValue);
+                } else if (fieldValue instanceof String) {
+                    builder.withClaim(fieldName, (String) fieldValue);
+                } else if (fieldValue instanceof Date) {
+                    builder.withClaim(fieldName, (Date) fieldValue);
+                } else if (fieldValue instanceof DateTime) {
+                    builder.withClaim(fieldName, ((DateTime) fieldValue).toDate());
+                } else if (fieldValue instanceof List<?>) {
+                    builder.withClaim(fieldName, (List<?>) fieldValue);
                 } else {
                     log.error("Unsupported data type! Data will be automatically converted to String for storage. " +
                             "Make sure the toString() method of this class has been overridden!");
@@ -242,15 +247,20 @@ public class AccessKeyUtil {
     public DecodedJWT info(String token) {
         JWTVerifier verifier;
         switch (algorithm) {
-            case HS256 -> verifier = JWT.require(Algorithm.HMAC256(secret)).build();
-            case HS384 -> verifier = JWT.require(Algorithm.HMAC384(secret)).build();
-            case HS512 -> verifier = JWT.require(Algorithm.HMAC512(secret)).build();
-            default -> {
+            case HS256:
+                verifier = JWT.require(Algorithm.HMAC256(secret)).build();
+                break;
+            case HS384:
+                verifier = JWT.require(Algorithm.HMAC384(secret)).build();
+                break;
+            case HS512:
+                verifier = JWT.require(Algorithm.HMAC512(secret)).build();
+                break;
+            default:
                 // 这里理论上应该抛出异常的，但是实在是懒得做了，就先这样吧。
                 // 至于其他的算法，后续再考虑加上。
                 verifier = JWT.require(Algorithm.HMAC256(secret)).build();
                 log.error("This algorithm is not supported yet, will use HMAC256 by default.");
-            }
         }
         return verifier.verify(token);
     }

@@ -11,20 +11,23 @@ import cn.vorbote.message.sender.tencent.config.TencentConfig;
 import cn.vorbote.message.sender.tencent.config.TencentRegion;
 import cn.vorbote.message.sender.tencent.models.SendMessageRequest;
 import cn.vorbote.message.sender.tencent.models.SendMessageResponse;
+import cn.vorbote.message.sender.tencent.models.SendStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,8 +87,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
 
     private byte[] hmac256(byte[] key, String message) {
         try {
-            final var mac = Mac.getInstance("HmacSHA256");
-            final var secretKeySpec = new SecretKeySpec(key, mac.getAlgorithm());
+            final Mac mac = Mac.getInstance("HmacSHA256");
+            final SecretKeySpec secretKeySpec = new SecretKeySpec(key, mac.getAlgorithm());
             mac.init(secretKeySpec);
             return mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
         } catch (NoSuchAlgorithmException | InvalidKeyException exception) {
@@ -96,8 +99,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
 
     private String sha256Hex(String s) {
         try {
-            final var md = MessageDigest.getInstance("SHA-256");
-            var d = md.digest(s.getBytes(StandardCharsets.UTF_8));
+            final MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] d = md.digest(s.getBytes(StandardCharsets.UTF_8));
             return DatatypeConverter.printHexBinary(d).toLowerCase();
         } catch (NoSuchAlgorithmException exception) {
             log.error(exception.getMessage());
@@ -117,19 +120,19 @@ public final class TencentSender implements IMessageSender<List<String>> {
      *                                 of the data is not serializable.
      */
     public MessageResponse send(TencentRegion region, MessageRequest<List<String>> request) throws IOException {
-        final var now = DateTime.now();
-        final var date = now.pattern("yyyy-MM-dd").toString();
+        final DateTime now = DateTime.now();
+        final String date = now.pattern("yyyy-MM-dd").toString();
 
         // build the payload that will be uploaded to tencent servers
-        var payload = new SendMessageRequest()
+        SendMessageRequest payload = new SendMessageRequest()
                 .setAppId(appId)
                 .setSign(sign)
                 .setTemplateId(request.templateId())
                 .setParams(request.getParams())
-                .setReceivers(List.of(request.receiver()));
+                .setReceivers(Collections.singletonList(request.receiver()));
 
         // joint the canonical request string
-        final var canonicalRequest = TencentConfig.SEND_METHOD + "\n" +
+        final String canonicalRequest = TencentConfig.SEND_METHOD + "\n" +
                 TencentConfig.CANONICAL_URI + "\n" +
                 TencentConfig.CANONICAL_QUERY_STRING + "\n" +
                 TencentConfig.CANONICAL_HEADERS + "\n" +
@@ -137,25 +140,25 @@ public final class TencentSender implements IMessageSender<List<String>> {
                 sha256Hex(objectMapper.writeValueAsString(payload));
 
         // joint the request string that need to be signed
-        var credentialScope = date + "/" + TencentConfig.SERVICE + "/" + "tc3_service";
-        var stringToSign = TencentConfig.ALGORITHM + "\n" +
+        String credentialScope = date + "/" + TencentConfig.SERVICE + "/" + "tc3_service";
+        String stringToSign = TencentConfig.ALGORITHM + "\n" +
                 now.unix() + "\n" +
                 credentialScope + "\n" +
                 sha256Hex(canonicalRequest); // hashed canonical request
 
         // calculate signature
-        var secretDate = hmac256(("TC3" + userProfile.secretKey()).getBytes(StandardCharsets.UTF_8), date);
-        var secretService = hmac256(secretDate, TencentConfig.SERVICE);
-        var secretSigning = hmac256(secretService, "tc3_request");
-        var signature = DatatypeConverter.printHexBinary(hmac256(secretSigning, stringToSign)).toLowerCase();
+        byte[] secretDate = hmac256(("TC3" + userProfile.secretKey()).getBytes(StandardCharsets.UTF_8), date);
+        byte[] secretService = hmac256(secretDate, TencentConfig.SERVICE);
+        byte[] secretSigning = hmac256(secretService, "tc3_request");
+        String signature = DatatypeConverter.printHexBinary(hmac256(secretSigning, stringToSign)).toLowerCase();
 
         // joint the header - authorization
-        final var authorization = TencentConfig.ALGORITHM + " " +
+        final String authorization = TencentConfig.ALGORITHM + " " +
                 "Credential=" + userProfile.secretId() + "/" + credentialScope + ", " +
                 "SignedHeaders=" + TencentConfig.SIGNED_HEADERS + ", " + "Signature=" + signature;
 
         // use okhttp send a request
-        var requestEntity = new Request.Builder()
+        Request requestEntity = new Request.Builder()
                 .url("https://" + TencentConfig.HOST)
                 .addHeader("Authorization", authorization)
                 .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -169,8 +172,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
 
         MessageResponse messageResponse = null;
 
-        try (var response = okHttpClient.newCall(requestEntity).execute()) {
-            var json = objectMapper.readTree(Optional.of(response).map(Response::body).map(item -> {
+        try (Response response = okHttpClient.newCall(requestEntity).execute()) {
+            JsonNode json = objectMapper.readTree(Optional.of(response).map(Response::body).map(item -> {
                 try {
                     return item.string();
                 } catch (IOException e) {
@@ -181,7 +184,7 @@ public final class TencentSender implements IMessageSender<List<String>> {
 
             if (json.has("Response")) {
                 // objectMapper.readValue(json.get("Response").toString(), SendMessageResponse.class);
-                var resp = Optional.ofNullable(json.get("Response"))
+                SendStatus resp = Optional.ofNullable(json.get("Response"))
                         .map(JsonNode::toString)
                         .map((item) -> {
                             try {
@@ -221,9 +224,8 @@ public final class TencentSender implements IMessageSender<List<String>> {
     @Override
     @Deprecated
     public MessageResponse batchSend(BatchMessageRequest<List<String>> request) {
-        throw new NotImplementedException("""
-                This feature will not be implemented as the Tencent Cloud Platform \
-                Send SMS interface supports the transmission of single or multiple SMS recipients.""");
+        throw new NotImplementedException("This feature will not be implemented as the Tencent Cloud Platform Send SMS " +
+                "interface supports the transmission of single or multiple SMS recipients.");
     }
 
     private String[] resolve(String receiver) {

@@ -6,10 +6,18 @@ package cn.vorbote.message.auth;
  *
  * @author vorbote
  */
-public record UserProfile(
-        String secretId,
-        String secretKey
-) {
+public final class UserProfile {
+
+    private final String secretId;
+    private final String secretKey;
+
+    public String secretId() {
+        return this.secretId;
+    }
+
+    public String secretKey() {
+        return this.secretKey;
+    }
 
     public UserProfile(String secretId, String secretKey) {
         this.secretId = secretId;
