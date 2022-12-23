@@ -3,7 +3,7 @@
 [![996.icu](https://badgen.net/badge/anti/996/orange?icon=github)](https://996.icu)
 [![sponsored by JetBrains s.r.o](https://badgen.net/badge/sponsored%20by/JetBrains)](https://www.jetbrains.com/community/opensource/?utm_campaign=opensource&utm_content=approved&utm_medium=email&utm_source=newsletter&utm_term=jblogo#support)
 [![available at maven central](https://badgen.net/badge/available%20at/maven%20central/orange?icon=maven)](https://repo1.maven.org/maven2/cn/vorbote)
-[![version 4.0.0](https://badgen.net/badge/version/4.0.0/red)](https://github.com/vorbote/vorbote-framework/releases/tag/v4.0.0)
+[![version 4.0.3](https://badgen.net/badge/version/4.0.0/red)](https://github.com/vorbote/vorbote-framework/releases/tag/v4.0.0)
 ![Spring Boot 3.0.0](https://badgen.net/badge/Spring%20Boot/3.0.0/orange)
 
 ## Core
