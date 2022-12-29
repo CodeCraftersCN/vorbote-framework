@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [4.1.0.EAP](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0.EAP) - 2022-12-29
+
+### Changes
+
+- Changed configurations of Request Method in CORS module from String to Enumerations.
+
+## [3.8.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v3.8.0) - 2022-12-23
+
+### Changes to compatibility
+
+- Compatible with **JDK 8** and **Spring Boot 2.7.x**
+
 ## [4.0.3](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.3) - 2022-12-19
 
 ### Fixed

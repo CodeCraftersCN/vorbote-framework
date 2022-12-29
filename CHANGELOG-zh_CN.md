@@ -1,5 +1,17 @@
 # 更新日志
 
+## [4.1.0.EAP](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0.EAP) - 2022-12-29
+
+### 调整
+
+- 将跨域配置中请求方法的部分从字符串配置修改为枚举类配置。
+
+## [3.8.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v3.8.0) - 2022-12-23
+
+### 适用性调整
+
+- 适配 JDK 8 + 及 Spring Boot 2.7.x 版本。
+
 ## [4.0.3](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.3) - 2022-12-19
 
 ### 修复
