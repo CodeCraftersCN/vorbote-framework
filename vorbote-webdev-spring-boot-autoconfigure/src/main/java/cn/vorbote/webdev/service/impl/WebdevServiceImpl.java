@@ -1,6 +1,7 @@
 package cn.vorbote.webdev.service.impl;
 
 import cn.vorbote.simplejwt.choices.JwtAlgorithm;
+import cn.vorbote.web.constants.RequestMethod;
 import cn.vorbote.webdev.cors.CorsConfigurationInfo;
 import cn.vorbote.webdev.jwt.JwtConfigurationInfo;
 import cn.vorbote.webdev.service.WebdevService;
@@ -63,7 +64,7 @@ public class WebdevServiceImpl implements WebdevService {
      * >MDN Docs</a>, this response header specifies one or more methods allowed when accessing a resource in response
      * to a preflight request.
      */
-    private final String[] allowMethods;
+    private final RequestMethod[] allowMethods;
 
     /**
      * According to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers"
@@ -97,7 +98,7 @@ public class WebdevServiceImpl implements WebdevService {
                              boolean allowCredentials,
                              String[] allowOrigin,
                              String[] allowHeaders,
-                             String[] allowMethods,
+                             RequestMethod[] allowMethods,
                              String[] exposeHeaders) {
         this.jwtEnabled = jwtEnabled;
         this.issuer = issuer;

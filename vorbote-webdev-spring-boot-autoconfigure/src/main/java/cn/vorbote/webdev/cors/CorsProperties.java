@@ -1,5 +1,6 @@
 package cn.vorbote.webdev.cors;
 
+import cn.vorbote.web.constants.RequestMethod;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -43,7 +44,7 @@ public class CorsProperties {
      * >MDN Docs</a>, this response header specifies one or more methods allowed when accessing a resource in response
      * to a preflight request.
      */
-    private String[] allowMethods;
+    private RequestMethod[] allowMethods;
 
     /**
      * According to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers"

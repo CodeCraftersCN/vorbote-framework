@@ -1,11 +1,14 @@
 package cn.vorbote.web.filter;
 
+import cn.vorbote.web.constants.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +54,7 @@ public class CorsFilter implements Filter {
      * >MDN Docs</a>, this response header specifies one or more methods allowed when accessing a resource in response
      * to a preflight request.
      */
-    private String[] allowMethods;
+    private RequestMethod[] allowMethods;
 
     /**
      * According to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers"
@@ -91,7 +94,7 @@ public class CorsFilter implements Filter {
      */
     public CorsFilter(boolean allowCredentials,
                       String[] allowOrigin,
-                      String[] allowMethods,
+                      RequestMethod[] allowMethods,
                       String[] allowHeaders,
                       String[] exposeHeaders) {
         this.allowCredentials = allowCredentials;
@@ -118,7 +121,7 @@ public class CorsFilter implements Filter {
         return allowHeaders;
     }
 
-    protected String[] getAllowMethods() {
+    protected RequestMethod[] getAllowMethods() {
         return allowMethods;
     }
 
@@ -134,7 +137,7 @@ public class CorsFilter implements Filter {
      */
     private static String fromArray(String[] array) {
         StringBuilder builder = new StringBuilder();
-        if (array != null) {
+        if (array != null && array.length != 0) {
             for (String item : array) {
                 builder.append(item).append(",");
             }
@@ -146,29 +149,34 @@ public class CorsFilter implements Filter {
      * Generate a default cors filter (cannot solve the {@code cors} problem).
      */
     public CorsFilter() {
-        this(false, new String[]{""}, new String[]{""}, new String[]{""}, new String[]{""});
+        this(false, null, null, null, null);
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         // Transform original ServletXxx instances to HttpServletXxx instances.
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        var request = (HttpServletRequest) servletRequest;
+        var response = (HttpServletResponse) servletResponse;
 
-        String allowedOrigin = "";
-        if (allowOrigin.length > 1) {
-            String origin = Optional.ofNullable(request.getHeader("Origin")).orElse("");
-            if (Arrays.stream(allowOrigin).anyMatch((item) -> item.equalsIgnoreCase(origin))) {
-                allowedOrigin = origin;
-            }
-        } else if (allowOrigin.length == 1) {
-            allowedOrigin = allowOrigin[0];
-        }
+        var allowedOrigin = Optional.ofNullable(allowOrigin)
+                .map((item) -> item.length)
+                .map((item) -> {
+                    if (item > 1) {
+                        var origin = Optional.ofNullable(request.getHeader("Origin")).orElse("");
+                        if (Arrays.stream(allowOrigin).anyMatch((anyOrigin) -> anyOrigin.equalsIgnoreCase(origin))) {
+                            return origin;
+                        }
+                    }
+                    return allowOrigin[0];
+                })
+                .orElse("");
+
+        var allowedMethods = Arrays.toString(allowMethods);
 
         // Handle CORS problem.
         response.addHeader("Access-Control-Allow-Credentials", String.valueOf(isAllowCredentials()));
         response.addHeader("Access-Control-Allow-Origin", allowedOrigin);
-        response.addHeader("Access-Control-Allow-Methods", fromArray(getAllowMethods()));
+        response.addHeader("Access-Control-Allow-Methods", allowedMethods.substring(1, allowedMethods.length() - 1));
         response.addHeader("Access-Control-Allow-Headers", fromArray(getAllowHeaders()));
 
         // Set exposed response headers
@@ -227,18 +235,27 @@ public class CorsFilter implements Filter {
 
             // set the property - allow methods
             log.debug("Initializing property [allowMethods]");
-            String[] tmpAllowMethods = Optional.ofNullable(filterConfig.getInitParameter("allowMethods"))
+            var tmpAllowMethods = Optional.ofNullable(filterConfig.getInitParameter("allowMethods"))
                     .map((value) -> value.split(",( )?"))
                     .orElse(new String[]{});
 
             if (Arrays.stream(tmpAllowMethods).allMatch((item) -> {
                 boolean checkResult = ALL_METHODS.contains(item.toUpperCase());
                 if (!checkResult) {
-                    log.error("Method [{}] does not like a web request method, consider remove it?", item);
+                    log.error("RequestMethod [{}] does not like a web request method, consider remove it?", item);
                 }
                 return checkResult;
             })) {
-                this.allowMethods = tmpAllowMethods;
+                try {
+                    var allowMethodList = new ArrayList<RequestMethod>();
+                    for (var method : tmpAllowMethods) {
+                        allowMethodList.add(RequestMethod.valueOf(method));
+                    }
+                    allowMethods = allowMethodList.toArray(new RequestMethod[]{});
+                } catch (IllegalArgumentException exception) {
+                    log.error("You might delivered a wrong request method, only these methods will be accepted: {}", ALL_METHODS);
+                    allowMethods = new RequestMethod[]{RequestMethod.GET, RequestMethod.POST};
+                }
             }
             log.debug("Property [allowMethods] initialized, value has been set to {}", Arrays.toString(allowMethods));
 

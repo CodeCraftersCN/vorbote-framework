@@ -1,5 +1,6 @@
 package cn.vorbote.webdev.cors;
 
+import cn.vorbote.web.constants.RequestMethod;
 import lombok.Builder;
 import lombok.Data;
 
@@ -46,7 +47,7 @@ public class CorsConfigurationInfo implements Serializable {
      * >MDN Docs</a>, this response header specifies one or more methods allowed when accessing a resource in response
      * to a preflight request.
      */
-    private final String[] allowMethods;
+    private final RequestMethod[] allowMethods;
 
     /**
      * According to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers"
