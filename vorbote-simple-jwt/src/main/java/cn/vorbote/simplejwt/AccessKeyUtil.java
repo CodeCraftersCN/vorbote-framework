@@ -175,8 +175,8 @@ public class AccessKeyUtil {
             if (field.isAnnotationPresent(JwtIgnore.class))
                 continue;
             field.setAccessible(true);
-            String fieldName = field.getName();
-            Object fieldValue = field.get(bean);
+            var fieldName = field.getName();
+            var fieldValue = field.get(bean);
             // 跳过空数据
             if (fieldValue != null) {
                 // 经过实验，无法通过动态转换进行 withClaim 运算，因此只能一个一个进行 instanceof 运算
@@ -201,8 +201,8 @@ public class AccessKeyUtil {
                 } else if (fieldValue instanceof List<?> v) {
                     builder.withClaim(fieldName, v);
                 } else {
-                    log.error("Unsupported data type! Data will be automatically converted to String for storage. " +
-                            "Make sure the toString() method of this class has been overridden!");
+                    log.error("The property [{}] is of an unsupported type and will be converted to String, please " +
+                            "ensure that the toString() method is overridden correctly! ", fieldName);
                     builder.withClaim(fieldName, fieldValue.toString());
                 }
                 // endregion
