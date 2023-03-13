@@ -120,7 +120,7 @@ public final class MapUtil {
                         case CLASS_BIG_DECIMAL -> entry.setValue(BigDecimal.valueOf(Double.parseDouble(entryValue)));
                         case CLASS_DATE_TIME -> entry.setValue(new DateTime(Long.parseLong(entryValue)));
                         case CLASS_DATE -> entry.setValue(new Date(Long.parseLong(entryValue)));
-                        default -> log.error("Unsupported Type or Class: {}", field.getGenericType());
+                        default -> log.error("Property [{}] is an unsupported Type or Class of {}", field.getName(), field.getGenericType());
 
                         // System.err.println("Unsupported Type or Class");
                     }
