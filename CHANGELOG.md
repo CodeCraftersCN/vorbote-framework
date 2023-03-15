@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## [4.0.6]((https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.6))
+
+### Changes
+
+- Changed the return type from `ResponseResult<?>` to `ResponseResult<Void>` of `BizException.respond()` method.
+
+## [4.0.5](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.5) - 2023-3-13 [YANKED]
+
+### Changes
+
+- Optimised AccessKeyUtil's alert text when having trouble converting data.
+
+## [4.0.4](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.4) - 2023-3-13 [YANKED]
+
+### Changes
+
+- Optimised MapUtil's alert text when having trouble converting data.
+
 ## [4.1.0.EAP](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0.EAP) - 2022-12-29
 
 ### Changes

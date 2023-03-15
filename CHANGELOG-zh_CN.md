@@ -1,5 +1,23 @@
 # 更新日志
 
+## [4.0.6]((https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.6))
+
+### 修改
+
+- 将 `BizException.respond()` 方法的返回值修改为 `ResponseResult<Void>`.
+
+## [4.0.5](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.5) - 2023-3-13 [YANKED]
+
+### 优化
+
+- 优化了 AccessKeyUtil 在转换不受支持的类型时的提示文案。
+
+## [4.0.4](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.4) - 2023-3-13 [YANKED]
+
+### 优化
+
+- 优化了 MapUtil 在转换不受支持的类型时的提示文案。
+
 ## [4.1.0.EAP](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0.EAP) - 2022-12-29
 
 ### 调整
