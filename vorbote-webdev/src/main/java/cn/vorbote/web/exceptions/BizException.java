@@ -51,8 +51,8 @@ public class BizException extends RuntimeException {
      *
      * @return A converted response result entity.
      */
-    public ResponseResult<?> respond() {
-        return ResponseResult.error(this.getMessage()).code(this.getCode());
+    public ResponseResult<Void> respond() {
+        return ResponseResult.<Void>error(this.getMessage()).code(this.getCode());
     }
 
 }
