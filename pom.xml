@@ -12,23 +12,23 @@
 
     <groupId>cn.vorbote</groupId>
     <artifactId>vorbote-framework</artifactId>
-    <version>4.0.6</version>
+    <version>4.1.0</version>
     <packaging>pom</packaging>
     <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>
 
     <modules>
         <module>vorbote-core</module>
+        <module>vorbote-ical</module>
         <module>vorbote-simple-jwt</module>
         <module>vorbote-webdev</module>
         <module>vorbote-webdev-spring-boot-starter</module>
         <module>vorbote-webdev-spring-boot-autoconfigure</module>
         <module>vorbote-message-sender-api</module>
+        <module>vorbote-message-sender-aliyun</module>
         <module>vorbote-message-sender-tencent</module>
         <module>vorbote-msgsender-spring-boot-autoconfigure</module>
         <module>vorbote-msgsender-spring-boot-starter</module>
-        <module>vorbote-ical</module>
-        <module>vorbote-message-sender-aliyun</module>
     </modules>
 
     <developers>
