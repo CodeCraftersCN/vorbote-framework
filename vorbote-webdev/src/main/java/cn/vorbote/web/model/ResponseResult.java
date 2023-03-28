@@ -27,6 +27,23 @@ public final class ResponseResult<T> {
     private long timestamp;
     private String message;
 
+    private String requestId;
+
+    // region Getters and Setters
+    /**
+     * Get the request ID.
+     *
+     * @return the request ID.
+     */
+    public String requestId() {
+        return requestId;
+    }
+
+    public ResponseResult<T> requestId(String requestId) {
+        this.requestId = requestId;
+        return this;
+    }
+
     /**
      * Get the data of status.
      *
@@ -113,19 +130,22 @@ public final class ResponseResult<T> {
      * @param format The format message.
      * @param args   The args to be put into the message.
      * @return The instance itself.
-     * @see StringUtil#format(String, Object...)
+     * @see String#format(String, Object...)
      */
     public ResponseResult<T> message(String format, Object... args) {
-        this.message = StringUtil.format(format, args);
+        this.message = String.format(format, args);
         return this;
     }
+    // endregion
 
+    // region Constructors
     /**
      * Generate a new Response Result instance.
      */
     public ResponseResult() {
         this.timestamp = DateTime.now().unix();
     }
+    // endregion
 
     /**
      * Generate a new Response Result instance with a success status.
