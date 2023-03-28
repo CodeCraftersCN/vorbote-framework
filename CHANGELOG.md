@@ -1,6 +1,12 @@
 # CHANGELOG
 
-## [4.0.6]((https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.6))
+## [4.1.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0) - 2023-3-28
+
+### Changes
+
+- Added property `requestId` in class `ResponseResult` for the convenience on tracking issues.
+
+## [4.0.6](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.6)
 
 ### Changes
 

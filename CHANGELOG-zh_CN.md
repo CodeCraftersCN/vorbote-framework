@@ -1,5 +1,11 @@
 # 更新日志
 
+## [4.1.0](https://github.com/zihluwang/vorbote-framework/releases/tag/v4.1.0) - 2023-3-28
+
+### 优化
+
+- 在类 `ResponseResult` 中添加字段 `requestId` 以方便问题追踪.
+
 ## [4.0.6]((https://github.com/zihluwang/vorbote-framework/releases/tag/v4.0.6))
 
 ### 修改
