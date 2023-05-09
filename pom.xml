@@ -12,7 +12,7 @@
 
     <groupId>cn.vorbote</groupId>
     <artifactId>vorbote-framework</artifactId>
-    <version>2023.05.a</version>
+    <version>2023.05.a00</version>
     <packaging>pom</packaging>
     <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>

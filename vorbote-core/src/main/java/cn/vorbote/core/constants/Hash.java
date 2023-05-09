@@ -12,12 +12,55 @@ import lombok.Getter;
 @Getter
 public enum Hash {
 
-    MD2("MD2"), MD5("MD5"),
+    /**
+     * Hash algorithm - MD2
+     */
+    MD2("MD2"),
 
-    SHA_1("sha-1"), SHA_224("sha-224"), SHA_256("sha-256"),
-    SHA_384("sha-384"), SHA_512("sha-512"),
+    /**
+     * Hash algorithm - MD5
+     */
+    MD5("MD5"),
 
-    RC4("rc4"), AES("aes"), DES("des");
+    /**
+     * Hash algorithm - SHA1
+     */
+    SHA_1("sha-1"),
+
+    /**
+     * Hash algorithm - SHA224
+     */
+    SHA_224("sha-224"),
+
+    /**
+     * Hash algorithm - SHA256
+     */
+    SHA_256("sha-256"),
+
+    /**
+     * Hash algorithm - SHA384
+     */
+    SHA_384("sha-384"),
+
+    /**
+     * Hash algorithm - SHA512
+     */
+    SHA_512("sha-512"),
+
+    /**
+     * Encryption algorithm - RC4
+     */
+    RC4("rc4"),
+
+    /**
+     * Encryption algorithm - AES
+     */
+    AES("aes"),
+
+    /**
+     * Encryption algorithm - DES
+     */
+    DES("des");
 
     private final String value;
 

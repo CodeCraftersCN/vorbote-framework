@@ -135,7 +135,7 @@ public final class Calendar {
      */
     public String resolve() {
         var events = new StringBuilder();
-        if (CollectionUtil.isNotEmpty(nodes)) {
+        if (!CollectionUtil.isEmpty(nodes)) {
             nodes.forEach(item -> events.append(item
                     .setDomainName(domainName)
                     .resolve()));

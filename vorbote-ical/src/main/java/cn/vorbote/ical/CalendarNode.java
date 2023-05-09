@@ -261,7 +261,7 @@ public abstract sealed class CalendarNode
     //
     protected String resolveCategories() {
         var builder = new StringBuilder();
-        if (CollectionUtil.isNotEmpty(categories)) {
+        if (!CollectionUtil.isEmpty(categories)) {
             categories.forEach(item -> builder.append(item).append(","));
             return builder.substring(0, builder.length() - 1);
         }

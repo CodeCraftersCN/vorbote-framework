@@ -118,6 +118,12 @@ public final class TimeSpan {
         return totalSeconds;
     }
 
+    /**
+     * Set total seconds of this time span.
+     *
+     * @param totalSeconds total seconds of this time span
+     * @return the {@code TimeSpan} instance itself
+     */
     public TimeSpan totalSeconds(long totalSeconds) {
         this.totalSeconds = totalSeconds;
         return this;

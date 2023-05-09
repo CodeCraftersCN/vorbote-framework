@@ -8,9 +8,17 @@ package cn.vorbote.core.exceptions;
  */
 public class SnowFlakeException extends RuntimeException {
 
+    /**
+     * Default constructor
+     */
     public SnowFlakeException() {
     }
 
+    /**
+     * Create a {@code SnowFlakeException} with a message.
+     *
+     * @param message the exception message
+     */
     public SnowFlakeException(String message) {
         super(message);
     }

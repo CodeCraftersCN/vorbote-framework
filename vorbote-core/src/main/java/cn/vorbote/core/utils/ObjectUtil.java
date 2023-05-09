@@ -10,7 +10,7 @@ import java.util.Optional;
  * <p>
  * Created at 18:55, 09 May 2023
  *
- * @author ziluw < zilu.wong@outlook.com >
+ * @author Zihlu WANG
  */
 public final class ObjectUtil {
 
@@ -18,10 +18,10 @@ public final class ObjectUtil {
     }
 
     /**
-     * Determine whether the given array is empty:
-     * i.e. {@code null} or of zero length.
+     * Determine whether the given array is empty: i.e. {@code null} or of zero length.
      *
      * @param array the array to check
+     * @return {@code true} when the given array is null or contains no element
      * @see #isEmpty(Object)
      */
     public static boolean isEmpty(Object[] array) {

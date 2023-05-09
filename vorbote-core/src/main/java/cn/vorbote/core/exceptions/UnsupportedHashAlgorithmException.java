@@ -8,8 +8,16 @@ package cn.vorbote.core.exceptions;
  */
 public class UnsupportedHashAlgorithmException extends RuntimeException {
 
+    /**
+     * Exception message.
+     */
     private final String message;
 
+    /**
+     * Create a {@code UnsupportedHashAlgorithmException} instance with algorithm name.
+     *
+     * @param algorithm the name of algorithm
+     */
     public UnsupportedHashAlgorithmException(String algorithm) {
         message = String.format("Unsupported algorithm %s.", algorithm);
     }
