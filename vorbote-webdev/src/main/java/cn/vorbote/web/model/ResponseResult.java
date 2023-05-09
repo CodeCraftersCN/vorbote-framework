@@ -1,6 +1,7 @@
 package cn.vorbote.web.model;
 
 import cn.vorbote.core.time.DateTime;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -154,7 +155,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(T data) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.OK.getCode();
+        result.code = HttpServletResponse.SC_OK;
         result.data = data;
         return result;
     }
@@ -168,7 +169,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.OK.getCode();
+        result.code = HttpServletResponse.SC_OK;
         result.message = message;
         return result;
     }
@@ -182,7 +183,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.OK.getCode();
+        result.code = HttpServletResponse.SC_OK;
         result.message = messageSupplier.get();
         return result;
     }
@@ -197,7 +198,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(T data, String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.OK.getCode();
+        result.code = HttpServletResponse.SC_OK;
         result.data = data;
         result.message = message;
         return result;
@@ -213,7 +214,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> success(T data, Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.OK.getCode();
+        result.code = HttpServletResponse.SC_OK;
         result.data = data;
         result.message = messageSupplier.get();
         return result;
@@ -228,7 +229,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> timeout(Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.REQUEST_TIMEOUT.getCode();
+        result.code = HttpServletResponse.SC_REQUEST_TIMEOUT;
         result.message = messageSupplier.get();
         return result;
     }
@@ -242,7 +243,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> timeout(String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.REQUEST_TIMEOUT.getCode();
+        result.code = HttpServletResponse.SC_REQUEST_TIMEOUT;
         result.message = message;
         return result;
     }
@@ -256,7 +257,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> error(Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.INTERNAL_SERVER_ERROR.getCode();
+        result.code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
         result.message = messageSupplier.get();
         return result;
     }
@@ -270,7 +271,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> error(String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.INTERNAL_SERVER_ERROR.getCode();
+        result.code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
         result.message = message;
         return result;
     }
@@ -284,7 +285,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> unauthorized(String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.UNAUTHORIZED.getCode();
+        result.code = HttpServletResponse.SC_UNAUTHORIZED;
         result.message = message;
         return result;
     }
@@ -298,7 +299,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> unauthorized(Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.UNAUTHORIZED.getCode();
+        result.code = HttpServletResponse.SC_UNAUTHORIZED;
         result.message = messageSupplier.get();
         return result;
     }
@@ -312,7 +313,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> forbidden(String message) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.FORBIDDEN.getCode();
+        result.code = HttpServletResponse.SC_FORBIDDEN;
         result.message = message;
         return result;
     }
@@ -326,7 +327,7 @@ public final class ResponseResult<T> {
      */
     public static <T> ResponseResult<T> forbidden(Supplier<String> messageSupplier) {
         ResponseResult<T> result = new ResponseResult<>();
-        result.code = WebStatus.FORBIDDEN.getCode();
+        result.code = HttpServletResponse.SC_FORBIDDEN;
         result.message = messageSupplier.get();
         return result;
     }
