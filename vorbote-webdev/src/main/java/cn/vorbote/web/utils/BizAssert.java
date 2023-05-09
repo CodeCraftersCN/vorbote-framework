@@ -1,17 +1,20 @@
 package cn.vorbote.web.utils;
 
+import cn.vorbote.core.utils.CollectionUtil;
 import cn.vorbote.core.utils.ObjectUtil;
 import cn.vorbote.core.utils.StringUtil;
 import cn.vorbote.web.exceptions.BizException;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
  * This class is to do some business assertions.
  * <p>
- * If the assertion is not passed, the util will throw a {@link BizException}
+ * If the assertion is not passed, the util will throw a {@link BizException}.
  * Created at 2022/2/22 22:22
  *
  * @author vorbote theodore0126@outlook.com
@@ -29,6 +32,58 @@ public final class BizAssert {
         return Optional.ofNullable(valueSupplier)
                 .map(Supplier::get)
                 .orElse(null);
+    }
+
+    /**
+     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
+     *
+     * @param expression a boolean expression
+     * @param code       the code returned to the front-end
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     */
+    public static void state(boolean expression, int code, String message) {
+        if (!expression) {
+            throw new BizException(code, message);
+        }
+    }
+
+    /**
+     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
+     * <p>
+     * The {@code code} will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param expression a boolean expression
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     */
+    public static void state(boolean expression, String message) {
+        state(expression, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
+     *
+     * @param expression      a boolean expression
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     */
+    public static void state(boolean expression, int code, Supplier<String> messageSupplier) {
+        state(expression, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
+     * <p>
+     * The {@code code} will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param expression      a boolean expression
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     */
+    public static void state(boolean expression, Supplier<String> messageSupplier) {
+        state(expression, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
     /**
@@ -504,5 +559,69 @@ public final class BizAssert {
         noNullElements(array, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
+    /**
+     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at lease one
+     * element.
+     *
+     * @param collection the collection to check
+     * @param code       the code returned to the front-end
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if the collection is {@code null} or contains no elements
+     * @see CollectionUtil#isEmpty(Collection)
+     */
+    public static void notEmpty(Collection<?> collection, int code, String message) {
+        if (CollectionUtil.isEmpty(collection)) {
+            throw new BizException(code, message);
+        }
+    }
+
+    /**
+     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at lease one
+     * element.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection the collection to check
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if the collection is {@code null} or contains no elements
+     * @see CollectionUtil#isEmpty(Collection)
+     * @see #notEmpty(Collection, int, String)
+     */
+    public static void notEmpty(Collection<?> collection, String message) {
+        notEmpty(collection, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at lease one
+     * element.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection      the collection to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the collection is {@code null} or contains no elements
+     * @see CollectionUtil#isEmpty(Collection)
+     * @see #notEmpty(Collection, int, String)
+     */
+    public static void notEmpty(Collection<?> collection, int code, Supplier<String> messageSupplier) {
+        notEmpty(collection, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at lease one
+     * element.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection      the collection to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the collection is {@code null} or contains no elements
+     * @see CollectionUtil#isEmpty(Collection)
+     * @see #notEmpty(Collection, int, String)
+     */
+    public static void notEmpty(Collection<?> collection, Supplier<String> messageSupplier) {
+        notEmpty(collection, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
 
 }
