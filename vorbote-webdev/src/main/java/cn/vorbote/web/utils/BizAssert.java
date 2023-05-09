@@ -29,6 +29,13 @@ public final class BizAssert {
     private BizAssert() {
     }
 
+    /**
+     * Get value from a supplier.
+     *
+     * @param valueSupplier a supplier for the value
+     * @param <T>           the type of the value
+     * @return value contained in the supplier
+     */
     private static <T> T getValueFromSupplier(Supplier<T> valueSupplier) {
         return Optional.ofNullable(valueSupplier)
                 .map(Supplier::get)
