@@ -1,10 +1,11 @@
 package cn.vorbote.web.utils;
 
+import cn.vorbote.core.utils.ObjectUtil;
+import cn.vorbote.core.utils.StringUtil;
 import cn.vorbote.web.exceptions.BizException;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -24,506 +25,484 @@ public final class BizAssert {
     private BizAssert() {
     }
 
+    private static <T> T getValueFromSupplier(Supplier<T> valueSupplier) {
+        return Optional.ofNullable(valueSupplier)
+                .map(Supplier::get)
+                .orElse(null);
+    }
+
     /**
-     * Assert that the given text does not contain the given substring.
-     * <pre class="code">BizAssert.doesNotContain(name, "rod", "Name must not contain \"rod\".");</pre>
+     * Assert a boolean expression, throwing an {@link BizException} if the expression evaluates to {@code false}.
      *
-     * @param textToSearch the text to search
-     * @param substring    the substring to find within the text
-     * @param code         the code when assertion fails
-     * @param message      the exception message to use if the assertion fails
-     * @throws BizException if the text contains the substring
+     * @param expression a boolean expression
+     * @param code       the code returned to the front-end
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
      */
-    public static void doesNotContain(String textToSearch, String substring, int code, String message) {
-        if (textToSearch != null && !textToSearch.isBlank() && textToSearch.contains(substring)) {
+    public static void isTrue(boolean expression, int code, String message) {
+        if (!expression) {
             throw new BizException(code, message);
         }
     }
 
-
-    public static void doesNotContain(String textToSearch, String substring, String message) {
-        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, message);
+    /**
+     * Assert a boolean expression, throwing an {@link BizException} if the expression evaluates to {@code false}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param expression a boolean expression
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     * @see #isTrue(boolean, int, String)
+     */
+    public static void isTrue(boolean expression, String message) {
+        isTrue(expression, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
+    /**
+     * Assert a boolean expression, throwing an {@link BizException} if the expression evaluates to {@code false}.
+     *
+     * @param expression      a boolean expression
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     * @see #isTrue(boolean, int, String)
+     */
+    public static void isTrue(boolean expression, int code, Supplier<String> messageSupplier) {
+        isTrue(expression, code, getValueFromSupplier(messageSupplier));
+    }
 
-    public static void doesNotContain(String textToSearch, String substring, int code, Supplier<String> messageSupplier) {
-        if (textToSearch != null && !textToSearch.isBlank() && textToSearch.contains(substring)) {
-            throw new BizException(code, getMessageFromSupplier(messageSupplier));
+    /**
+     * Assert a boolean expression, throwing an {@link BizException} if the expression evaluates to {@code false}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param expression      a boolean expression
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if {@code expression} is {@code false}
+     * @see #isTrue(boolean, int, String)
+     */
+    public static void isTrue(boolean expression, Supplier<String> messageSupplier) {
+        isTrue(expression, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that an object is {@code null}.
+     *
+     * @param object  the object to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     */
+    public static void isNull(Object object, int code, String message) {
+        if (object != null) {
+            throw new BizException(code, message);
         }
     }
 
-
-    public static void doesNotContain(String textToSearch, String substring, Supplier<String> messageSupplier) {
-        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, messageSupplier);
+    /**
+     * Assert that an object is {@code null}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param object  the object to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #isNull(Object, int, String)
+     */
+    public static void isNull(Object object, String message) {
+        isNull(object, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
+    /**
+     * Assert that an object is {@code null}.
+     *
+     * @param object          the object to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #isNull(Object, int, String)
+     */
+    public static void isNull(Object object, int code, Supplier<String> messageSupplier) {
+        isNull(object, code, getValueFromSupplier(messageSupplier));
+    }
 
+    /**
+     * Assert that an object is {@code null}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param object          the object to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #isNull(Object, int, String)
+     */
+    public static void isNull(Object object, Supplier<String> messageSupplier) {
+        isNull(object, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that an object is not {@code null}.
+     *
+     * @param object  the object to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     */
+    public static void notNull(Object object, int code, String message) {
+        if (object == null) {
+            throw new BizException(code, message);
+        }
+    }
+
+    /**
+     * Assert that an object is not {@code null}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param object  the object to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #notNull(Object, int, String)
+     */
+    public static void notNull(Object object, String message) {
+        notNull(object, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert that an object is not {@code null}.
+     *
+     * @param object          the object to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #notNull(Object, int, String)
+     */
+    public static void notNull(Object object, int code, Supplier<String> messageSupplier) {
+        notNull(object, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that an object is not {@code null}.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param object          the object to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object is not {@code null}
+     * @see #notNull(Object, int, String)
+     */
+    public static void notNull(Object object, Supplier<String> messageSupplier) {
+        notNull(object, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that the given String is not empty; that is, it must not be {@code null} and not the empty String.
+     *
+     * @param text    the String to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the text is empty
+     * @see StringUtil#hasLength
+     */
     public static void hasLength(String text, int code, String message) {
-        if (text != null && text.length() > 0) {
+        if (!StringUtil.hasLength(text)) {
             throw new BizException(code, message);
         }
     }
 
-
+    /**
+     * Assert that the given String is not empty; that is, it must not be {@code null} and not the empty String.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param text    the String to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the text is empty
+     * @see StringUtil#hasLength
+     * @see #hasLength(String, int, String)
+     */
     public static void hasLength(String text, String message) {
         hasLength(text, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
-
+    /**
+     * Assert that the given String is not empty; that is, it must not be {@code null} and not the empty String.
+     *
+     * @param text            the String to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text is empty
+     * @see StringUtil#hasLength
+     * @see #hasLength(String, int, String)
+     */
     public static void hasLength(String text, int code, Supplier<String> messageSupplier) {
-        if (text != null && text.length() > 0) {
-            throw new BizException(code, getMessageFromSupplier(messageSupplier));
-        }
+        hasLength(text, code, getValueFromSupplier(messageSupplier));
     }
 
-
+    /**
+     * Assert that the given String is not empty; that is, it must not be {@code null} and not the empty String.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param text            the String to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text is empty
+     * @see StringUtil#hasLength
+     * @see #hasLength(String, int, String)
+     */
     public static void hasLength(String text, Supplier<String> messageSupplier) {
-        hasLength(text, HttpServletResponse.SC_BAD_REQUEST, messageSupplier);
+        hasLength(text, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
-
+    /**
+     * Assert that the given String contains valid text content; that is, it must not be {@code null} and must contain
+     * at least one non-whitespace character.
+     *
+     * @param text    the String to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasText
+     */
     public static void hasText(String text, int code, String message) {
         if (!StringUtil.hasText(text)) {
-            throw new BizException(, message);
-        }
-    }
-
-
-    public static void hasText(String text, String message) {
-        if (!StringUtil.hasText(text)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
+            throw new BizException(code, message);
         }
     }
 
     /**
-     * Assert that the given {@code String} contains valid text content; that is, it must not be {@code null} and must
-     * contain at lease one non-whitespace character.
+     * Assert that the given String contains valid text content; that is, it must not be {@code null} and must contain
+     * at least one non-whitespace character.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
-     * @param text            The {@code String} to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the text does not contain valid text content.
+     * @param text    the String to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasText
+     * @see #hasText(String, int, String)
+     */
+    public static void hasText(String text, String message) {
+        hasText(text, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert that the given String contains valid text content; that is, it must not be {@code null} and must contain
+     * at least one non-whitespace character.
+     *
+     * @param text            the String to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasText
+     * @see #hasText(String, int, String)
+     */
+    public static void hasText(String text, int code, Supplier<String> messageSupplier) {
+        hasText(text, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that the given String contains valid text content; that is, it must not be {@code null} and must contain
+     * at least one non-whitespace character.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param text            the String to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasText
+     * @see #hasText(String, int, String)
      */
     public static void hasText(String text, Supplier<String> messageSupplier) {
-        if (!StringUtil.hasText(text)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
+        hasText(text, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
     /**
-     * Assert that {@code superType.isAssignableFrom(subType)} is {@code true}.
+     * Assert that the given text does not contain the given substring.
      *
-     * @param superType The super type to check against.
-     * @param subType   The subtype to check.
-     * @param message   A message which will be prepended to provide further context. If it is empty or end in
-     *                  {@code ":"} or {@code ";"} or {@code ","} or {@code "."}, a full exception message will be
-     *                  appended. If it ends in a space, the name of the offending subtype will be appended.
-     * @throws BizException If the classes are not assignable.
+     * @param textToSearch the text to search
+     * @param substring    the substring to find within the text
+     * @param code         the code returned to the front-end
+     * @param message      the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasLength(String)
      */
-    public static void isAssignable(Class<?> superType, Class<?> subType, String message) {
-        notNull(superType, "Super type to check against must not be null.");
-        if (subType == null || !superType.isAssignableFrom(subType)) {
-            assignableCheckFailed(superType, subType, message);
+    public static void doesNotContain(String textToSearch, String substring, int code, String message) {
+        if (StringUtil.hasLength(textToSearch) && StringUtil.hasLength(substring) &&
+                textToSearch.contains(substring)) {
+            throw new BizException(code, message);
         }
     }
 
     /**
-     * Assert that {@code superType.isAssignableFrom(subType)} is {@code true}.
+     * Assert that the given text does not contain the given substring.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
-     * @param superType       The super type to check against.
-     * @param subType         The subtype to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails. See
-     *                        {@link #isAssignable(Class, Class, String)} for details.
-     * @throws BizException If the classes are not assignable.
+     * @param textToSearch the text to search
+     * @param substring    the substring to find within the text
+     * @param message      the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasLength(String)
+     * @see #doesNotContain(String, String, int, String)
      */
-    public static void isAssignable(Class<?> superType, Class<?> subType, Supplier<String> messageSupplier) {
-        notNull(superType, "Super type to check against must not be null.");
-        if (subType == null || !superType.isAssignableFrom(subType)) {
-            assignableCheckFailed(superType, subType, getMessageFromSupplier(messageSupplier));
-        }
+    public static void doesNotContain(String textToSearch, String substring, String message) {
+        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
     /**
-     * Assert that the provided object is an instance of the provided class.
+     * Assert that the given text does not contain the given substring.
      *
-     * @param type    The type to check against.
-     * @param object  The object to check.
-     * @param message A message which will be prepended to provide further context. If it is empty or ends in
-     *                {@code ":"} or {@code ";"} or {@code ","} or {@code "."}, a full exception message will be
-     *                appended. In any other case, a {@code ":"} with a space and the name of the offending object's
-     *                type will be appended.
-     * @throws BizException If the object is not an instance of type.
+     * @param textToSearch    the text to search
+     * @param code            the code returned to the front-end
+     * @param substring       the substring to find within the text
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasLength(String)
+     * @see #doesNotContain(String, String, int, String)
      */
-    public static void isInstanceOf(Class<?> type, Object object, String message) {
-        notNull(type, "Type to check against must not be null.");
-        if (!type.isInstance(object)) {
-            instanceCheckFailed(type, object, message);
-        }
+    public static void doesNotContain(String textToSearch, String substring, int code, Supplier<String> messageSupplier) {
+        doesNotContain(textToSearch, substring, code, getValueFromSupplier(messageSupplier));
     }
 
     /**
-     * Assert that the provided object is an instance of the provided class.
+     * Assert that the given text does not contain the given substring.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
-     * @param type            The type to check against.
-     * @param object          The object to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails. See
-     *                        {@link #isInstanceOf(Class, Object, String)} for details.
-     * @throws BizException If the object is not an instance of type.
+     * @param textToSearch    the text to search
+     * @param substring       the substring to find within the text
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the text does not contain valid text content
+     * @see StringUtil#hasLength(String)
+     * @see #doesNotContain(String, String, int, String)
      */
-    public static void isInstanceOf(Class<?> type, Object object, Supplier<String> messageSupplier) {
-        notNull(type, "Type to check against must not be null.");
-        if (!type.isInstance(object)) {
-            instanceCheckFailed(type, object, getMessageFromSupplier(messageSupplier));
-        }
+    public static void doesNotContain(String textToSearch, String substring, Supplier<String> messageSupplier) {
+        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
     /**
-     * Assert that an object is null.
-     *
-     * @param object  The object to check.
-     * @param message The exception message to use if assertion fails.
-     * @throws BizException If the object is not null.
-     */
-    public static void isNull(Object object, String message) {
-        if (object != null) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
-    }
-
-    /**
-     * Assert that an object is null.
-     *
-     * @param object          The object to check.
-     * @param messageSupplier A supplier for the exception message to use if assertion fails.
-     * @throws BizException If the object is not null.
-     */
-    public static void isNull(Object object, Supplier<String> messageSupplier) {
-        if (object != null) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
-     *
-     * @param expression A boolean expression.
-     * @param message    The exception message to use if assertion fails.
-     * @throws BizException If expression is {@code false}
-     */
-    public static void isTrue(boolean expression, String message) {
-        if (!expression) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
-    }
-
-    /**
-     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.
-     *
-     * @param expression      A boolean expression.
-     * @param messageSupplier A supplier for the exception message to use if assertion fails.
-     * @throws BizException If expression is {@code false}
-     */
-    public static void isTrue(boolean expression, Supplier<String> messageSupplier) {
-        if (!expression) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Assert that a collection contains no null elements. <br>
-     * Note: Does not complain if the collection is empty.
-     *
-     * @param collection The collection to check.
-     * @param message    The exception message to use if assertion fails.
-     * @throws BizException If the collection contains a null element.
-     */
-    public static void noNullElements(Collection<?> collection, String message) {
-        if (collection != null) {
-            collection.forEach((item) -> {
-                if (item == null) {
-                    throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-                }
-            });
-        }
-    }
-
-    /**
-     * Assert that a collection contains no null elements. <br>
-     * Note: Does not complain if the collection is empty.
-     *
-     * @param collection      The collection to check.
-     * @param messageSupplier A supplier for the exception message to use if assertion fails.
-     * @throws BizException If the collection contains a null element.
-     */
-    public static void noNullElements(Collection<?> collection, Supplier<String> messageSupplier) {
-        if (collection != null) {
-            collection.forEach((item) -> {
-                if (item == null) {
-                    throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-                }
-            });
-        }
-    }
-
-    /**
-     * Assert that an array contains no null elements.<br>
-     * Note: Does not complain if the array is empty.
-     *
-     * @param array   The array to check.
-     * @param message The exception message to use if assertion fails.
-     * @throws BizException If the object array contains a null element.
-     */
-    public static void noNullElements(Object[] array, String message) {
-        if (array != null) {
-            for (Object element : array) {
-                if (element == null) {
-                    throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-                }
-            }
-        }
-    }
-
-    /**
-     * Assert that an array contains no null elements.<br>
-     * Note: Does not complain if the array is empty.
-     *
-     * @param array           The array to check.
-     * @param messageSupplier A supplier for the exception message to use if assertion fails.
-     * @throws BizException If the object array contains a null element.
-     */
-    public static void noNullElements(Object[] array, Supplier<String> messageSupplier) {
-        if (array != null) {
-            for (Object element : array) {
-                if (element == null) {
-                    throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-                }
-            }
-        }
-    }
-
-    /**
-     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at least one
+     * Assert that an array contains elements; that is, it must not be {@code null} and must contain at least one
      * element.
      *
-     * @param collection The collection to check.
-     * @param message    The exception message to use if the assertion fails.
-     * @throws BizException If the collection is null or contains no elements.
+     * @param array   the array to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see ObjectUtil#isEmpty(Object[])
      */
-    public static void notEmpty(Collection<?> collection, String message) {
-        if (collection == null || collection.size() == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
+    public static void notEmpty(Object[] array, int code, String message) {
+        if (ObjectUtil.isEmpty(array)) {
+            throw new BizException(code, message);
         }
     }
 
     /**
-     * Assert that a collection contains elements; that is, it must not be {@code null} and must contain at least one
+     * Assert that an array contains elements; that is, it must not be {@code null} and must contain at least one
      * element.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
-     * @param collection      The collection to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the collection is null or contains no elements.
-     */
-    public static void notEmpty(Collection<?> collection, Supplier<String> messageSupplier) {
-        if (collection == null || collection.size() == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Assert that a {@code Map} contains entries; that is, it must not be {@code null} and must contain at least one
-     * entry.
-     *
-     * @param map     The map to check.
-     * @param message The exception message to use if the assertion fails.
-     * @throws BizException If the map is null or contains no entries.
-     */
-    public static void notEmpty(Map<?, ?> map, String message) {
-        if (map == null || map.size() == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
-    }
-
-    /**
-     * Assert that a {@code Map} contains entries; that is, it must not be {@code null} and must contain at least one
-     * entry.
-     *
-     * @param map             The map to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the map is null or contains no entries.
-     */
-    public static void notEmpty(Map<?, ?> map, Supplier<String> messageSupplier) {
-        if (map == null || map.size() == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Assert that an array contains no {@code null} elements.<br>
-     * Note: Does not complain if the array is empty.
-     *
-     * @param array   The array to check.
-     * @param message The exception message to use if the assertion fails.
-     * @throws BizException If the object array contains a null element.
+     * @param array   the array to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see ObjectUtil#isEmpty(Object[])
+     * @see #notEmpty(Object[], int, String)
      */
     public static void notEmpty(Object[] array, String message) {
-        if (array == null || array.length == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
+        notEmpty(array, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
     /**
-     * Assert that an array contains no {@code null} elements.<br>
-     * Note: Does not complain if the array is empty.
+     * Assert that an array contains elements; that is, it must not be {@code null} and must contain at least one
+     * element.
      *
-     * @param array           The array to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the object array contains a null element.
+     * @param array           the array to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see ObjectUtil#isEmpty(Object[])
+     * @see #notEmpty(Object[], int, String)
+     */
+    public static void notEmpty(Object[] array, int code, Supplier<String> messageSupplier) {
+        notEmpty(array, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that an array contains elements; that is, it must not be {@code null} and must contain at least one
+     * element.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param array           the array to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see ObjectUtil#isEmpty(Object[])
+     * @see #notEmpty(Object[], int, String)
      */
     public static void notEmpty(Object[] array, Supplier<String> messageSupplier) {
-        if (array == null || array.length == 0) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
+        notEmpty(array, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
     /**
-     * Assert that an object is not null.
+     * Assert that an array contains no {@code null} elements.
      *
-     * @param object  The object to check.
-     * @param message The exception message to use if the assertion fails.
-     * @throws BizException If the object is null.
+     * @param array   the array to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
      */
-    public static void notNull(Object object, String message) {
-        if (object == null) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
-    }
-
-    /**
-     * Assert that an object is not null.
-     *
-     * @param object          The object to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the object is null.
-     */
-    public static void notNull(Object object, Supplier<String> messageSupplier) {
-        if (object == null) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.<br>
-     * Call {@link #isTrue(boolean, String)} if you wish to throw an {@code BizException} on assertion failure.
-     *
-     * @param expression A boolean expression.
-     * @param message    The exception message to use if the assertion fails.
-     * @throws BizException If expression is false.
-     */
-    public static void state(boolean expression, String message) {
-        if (!expression) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
-        }
-    }
-
-    /**
-     * Assert a boolean expression, throwing an {@code BizException} if the expression evaluates to {@code false}.<br>
-     * Call {@link #isTrue(boolean, String)} if you wish to throw an {@code BizException} on assertion failure.
-     *
-     * @param expression      A boolean expression.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If expression is false.
-     */
-    public static void state(boolean expression, Supplier<String> messageSupplier) {
-        if (!expression) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
-        }
-    }
-
-    /**
-     * Check whether the given {@code String} is ends with a colon ({@code ":"}), a semicolon ({@code ";"}), a comma
-     * ({@code ","}) or a period ({@code "."}).
-     *
-     * @param message The {@code String} to check.
-     * @return Value {@code true} when the given {@code String} ends with a colon ({@code ":"}), a semicolon
-     * ({@code ";"}), a comma ({@code ","}) or a period ({@code "."}).
-     */
-    private static boolean endsWithSeparator(String message) {
-        return (message.endsWith(":") || message.endsWith(";") || message.endsWith(",") || message.endsWith("."));
-    }
-
-    /**
-     * Generate a message with specific type name.
-     *
-     * @param message  The message to be appended.
-     * @param typeName The type name to append.
-     * @return Appended message {@code String}.
-     */
-    private static String messageWithTypeName(String message, Object typeName) {
-        return message + (message.endsWith(" ") ? "" : ": ") + typeName;
-    }
-
-    /**
-     * Generate a {@code BizException} with an appropriate message when the object is not the type.
-     *
-     * @param type    The specific type.
-     * @param obj     The checked object.
-     * @param message The message to show.
-     */
-    private static void instanceCheckFailed(Class<?> type, Object obj, String message) {
-        String className = (obj != null ? obj.getClass().getName() : "null");
-        String result = "";
-        boolean defaultMessage = true;
-
-        if (!StringUtil.isBlank(message)) {
-            if (endsWithSeparator(message)) {
-                result = message + " ";
-            } else {
-                result = messageWithTypeName(message, className);
-                defaultMessage = false;
+    public static void noNullElements(Object[] array, int code, String message) {
+        if (array != null) {
+            for (var element : array) {
+                if (element == null) {
+                    throw new BizException(code, message);
+                }
             }
         }
-
-        if (defaultMessage) {
-            result += ("Object of class [" + className + "] must be an instance of " + type);
-        }
-
-        throw new BizException(WebStatus.BAD_REQUEST.getCode(), result);
     }
 
     /**
-     * Generate a {@code BizException} with an appropriate message when the subtype is not assignable from the
-     * supertype.
+     * Assert that an array contains no {@code null} elements.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
-     * @param superType The super type to check against.
-     * @param subType   The subtype to check.
-     * @param message   The message to show.
+     * @param array   the array to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see #noNullElements(Object[], int, String)
      */
-    private static void assignableCheckFailed(Class<?> superType, Class<?> subType, String message) {
-        String result = "";
-        boolean defaultMessage = true;
-        if (!StringUtil.isBlank(message)) {
-            if (endsWithSeparator(message)) {
-                result = message + " ";
-            } else {
-                result = messageWithTypeName(message, subType);
-                defaultMessage = false;
-            }
-        }
-
-        if (defaultMessage) {
-            result += (subType + " is not assignable to " + superType);
-        }
-
-        throw new BizException(WebStatus.BAD_REQUEST.getCode(), result);
+    public static void noNullElements(Object[] array, String message) {
+        noNullElements(array, HttpServletResponse.SC_BAD_REQUEST, message);
     }
 
     /**
-     * Get a message from a supplier.
+     * Assert that an array contains no {@code null} elements.
      *
-     * @param messageSupplier A supplier which supply a exception message.
-     * @return The message from the supplier or {@code null} when the supplier is null.
+     * @param array           the array to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see #noNullElements(Object[], int, String)
      */
-    private static String getMessageFromSupplier(Supplier<String> messageSupplier) {
-        return (messageSupplier != null) ? messageSupplier.get() : null;
+    public static void noNullElements(Object[] array, int code, Supplier<String> messageSupplier) {
+        noNullElements(array, code, getValueFromSupplier(messageSupplier));
     }
+
+    /**
+     * Assert that an array contains no {@code null} elements.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param array           the array to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the object array is {@code null} or contains no elements
+     * @see #noNullElements(Object[], int, String)
+     */
+    public static void noNullElements(Object[] array, Supplier<String> messageSupplier) {
+        noNullElements(array, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
 
 }

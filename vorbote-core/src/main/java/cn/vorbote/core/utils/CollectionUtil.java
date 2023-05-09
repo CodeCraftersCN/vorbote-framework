@@ -1,6 +1,7 @@
 package cn.vorbote.core.utils;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * CollectionUtil<br>
@@ -21,6 +22,9 @@ public final class CollectionUtil {
         return !collection.isEmpty();
     }
 
+    public static boolean isEmpty(Map<?, ?> map) {
+        return (map == null || map.isEmpty());
+    }
 
 
 }
