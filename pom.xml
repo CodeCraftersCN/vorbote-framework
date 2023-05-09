@@ -12,7 +12,7 @@
 
     <groupId>cn.vorbote</groupId>
     <artifactId>vorbote-framework</artifactId>
-    <version>4.1.0</version>
+    <version>2023.05.a</version>
     <packaging>pom</packaging>
     <name>VorBotE :: Framework</name>
     <description>The root module for all opensource framework.</description>
@@ -57,7 +57,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>3.0.0</spring.boot.version>
+        <spring.boot.version>3.0.6</spring.boot.version>
     </properties>
 
     <dependencies>
@@ -226,7 +226,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -240,7 +239,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.2</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -253,7 +251,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -266,7 +263,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.0</version>
                         <configuration>
                             <excludes>
                                 <exclude>*.xml</exclude>
@@ -298,7 +294,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -311,7 +306,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.2</version>
                         <configuration>
                             <locale>en_GB</locale>
                         </configuration>
@@ -327,7 +321,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.0</version>
                         <configuration>
                             <excludes>
                                 <exclude>*.xml</exclude>

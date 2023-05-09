@@ -64,7 +64,7 @@ public final class StringUtil {
      * @return Value {@code true} if the {@code CharSequence} is not {@code null} and has length.
      */
     public static boolean hasLength(CharSequence str) {
-        return !(str == null || str.length() <= 0);
+        return !(str == null || str.length() == 0);
     }
 
     /**

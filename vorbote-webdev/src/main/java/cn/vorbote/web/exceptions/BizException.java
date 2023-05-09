@@ -1,6 +1,7 @@
 package cn.vorbote.web.exceptions;
 
 import cn.vorbote.web.model.ResponseResult;
+import cn.vorbote.web.utils.BizAssert;
 
 /**
  * BizException stands for Business Exception, and meant to be thrown while Business Assertion fails. This Exception is
@@ -14,7 +15,7 @@ public class BizException extends RuntimeException {
     /**
      * The web status code.
      */
-    private final int code;
+    private int code;
 
     /**
      * Get the exception message.
@@ -33,6 +34,17 @@ public class BizException extends RuntimeException {
      */
     public int getCode() {
         return code;
+    }
+
+    /**
+     * Set the web status code.
+     *
+     * @param code the web status code
+     * @return the instance itself
+     */
+    public BizException setCode(int code) {
+        this.code = code;
+        return this;
     }
 
     /**

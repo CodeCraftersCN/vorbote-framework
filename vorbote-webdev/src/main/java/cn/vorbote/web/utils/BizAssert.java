@@ -1,8 +1,7 @@
 package cn.vorbote.web.utils;
 
-import cn.vorbote.core.utils.StringUtil;
-import cn.vorbote.web.constants.WebStatus;
 import cn.vorbote.web.exceptions.BizException;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,6 +14,7 @@ import java.util.function.Supplier;
  * Created at 2022/2/22 22:22
  *
  * @author vorbote theodore0126@outlook.com
+ * @author zihluwang really@zihlu.wang
  */
 public final class BizAssert {
 
@@ -28,67 +28,67 @@ public final class BizAssert {
      * Assert that the given text does not contain the given substring.
      * <pre class="code">BizAssert.doesNotContain(name, "rod", "Name must not contain \"rod\".");</pre>
      *
-     * @param textToSearch The text to search.
-     * @param substring    The substring to find within the text.
-     * @param message      The exception message to use if the assertion fails.
-     * @throws BizException If the text contains the substring.
+     * @param textToSearch the text to search
+     * @param substring    the substring to find within the text
+     * @param code         the code when assertion fails
+     * @param message      the exception message to use if the assertion fails
+     * @throws BizException if the text contains the substring
      */
+    public static void doesNotContain(String textToSearch, String substring, int code, String message) {
+        if (textToSearch != null && !textToSearch.isBlank() && textToSearch.contains(substring)) {
+            throw new BizException(code, message);
+        }
+    }
+
+
     public static void doesNotContain(String textToSearch, String substring, String message) {
-        if (!StringUtil.isBlank(textToSearch) && textToSearch.contains(substring)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
+        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+
+    public static void doesNotContain(String textToSearch, String substring, int code, Supplier<String> messageSupplier) {
+        if (textToSearch != null && !textToSearch.isBlank() && textToSearch.contains(substring)) {
+            throw new BizException(code, getMessageFromSupplier(messageSupplier));
         }
     }
 
-    /**
-     * Assert that the given text does not contain the given substring.
-     *
-     * @param textToSearch    The text to search.
-     * @param substring       The substring to find within the text.
-     * @param messageSupplier The exception message to use if the assertion fails.
-     * @throws BizException If the text contains the substring.
-     */
+
     public static void doesNotContain(String textToSearch, String substring, Supplier<String> messageSupplier) {
-        if (!StringUtil.isBlank(textToSearch) && textToSearch.contains(substring)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
+        doesNotContain(textToSearch, substring, HttpServletResponse.SC_BAD_REQUEST, messageSupplier);
+    }
+
+
+    public static void hasLength(String text, int code, String message) {
+        if (text != null && text.length() > 0) {
+            throw new BizException(code, message);
         }
     }
 
-    /**
-     * Assert that the given {@code String} is not empty; that is, it must not be {@code null} and not the empty
-     * {@code String}.
-     *
-     * @param text    The {@code String} to check.
-     * @param message The exception message to use if the assertion fails.
-     * @throws BizException If the text is empty.
-     */
+
     public static void hasLength(String text, String message) {
-        if (StringUtil.hasLength(text)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
+        hasLength(text, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+
+    public static void hasLength(String text, int code, Supplier<String> messageSupplier) {
+        if (text != null && text.length() > 0) {
+            throw new BizException(code, getMessageFromSupplier(messageSupplier));
         }
     }
 
-    /**
-     * Assert that the given {@code String} is not empty; that is, it must not be {@code null} and not the empty
-     * {@code String}.
-     *
-     * @param text            The {@code String} to check.
-     * @param messageSupplier A supplier for the exception message to use if the assertion fails.
-     * @throws BizException If the text is empty.
-     */
+
     public static void hasLength(String text, Supplier<String> messageSupplier) {
-        if (StringUtil.hasLength(text)) {
-            throw new BizException(WebStatus.BAD_REQUEST.getCode(), getMessageFromSupplier(messageSupplier));
+        hasLength(text, HttpServletResponse.SC_BAD_REQUEST, messageSupplier);
+    }
+
+
+    public static void hasText(String text, int code, String message) {
+        if (!StringUtil.hasText(text)) {
+            throw new BizException(, message);
         }
     }
 
-    /**
-     * Assert that the given {@code String} contains valid text content; that is, it must not be {@code null} and must
-     * contain at lease one non-whitespace character.
-     *
-     * @param text    The {@code String} to check.
-     * @param message The exception message to use if the assertion fails.
-     * @throws BizException If the text does not contain valid text content.
-     */
+
     public static void hasText(String text, String message) {
         if (!StringUtil.hasText(text)) {
             throw new BizException(WebStatus.BAD_REQUEST.getCode(), message);
