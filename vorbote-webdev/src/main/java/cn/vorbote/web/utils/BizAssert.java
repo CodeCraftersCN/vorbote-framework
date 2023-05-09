@@ -4,6 +4,7 @@ import cn.vorbote.core.utils.CollectionUtil;
 import cn.vorbote.core.utils.ObjectUtil;
 import cn.vorbote.core.utils.StringUtil;
 import cn.vorbote.web.exceptions.BizException;
+import com.sun.net.httpserver.HttpPrincipal;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Collection;
@@ -683,6 +684,58 @@ public final class BizAssert {
      */
     public static void noNullElements(Collection<?> collection, Supplier<String> messageSupplier) {
         noNullElements(collection, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that a Map contains entries; that is, it must not be {@code null} and must contain at least one entry.
+     *
+     * @param map     the map to check
+     * @param code    the code returned to the front-end
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the map is {@code null} or contains no entries
+     */
+    public static void notEmpty(Map<?, ?> map, int code, String message) {
+        if (CollectionUtil.isEmpty(map)) {
+            throw new BizException(code, message);
+        }
+    }
+
+    /**
+     * Assert that a Map contains entries; that is, it must not be {@code null} and must contain at least one entry.
+     *
+     * @param map             the map to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the map is {@code null} or contains no entries
+     */
+    public static void notEmpty(Map<?, ?> map, int code, Supplier<String> messageSupplier) {
+        notEmpty(map, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that a Map contains entries; that is, it must not be {@code null} and must contain at least one entry.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param map     the map to check
+     * @param message the exception message to use if the assertion fails
+     * @throws BizException if the map is {@code null} or contains no entries
+     */
+    public static void notEmpty(Map<?, ?> map, String message) {
+        notEmpty(map, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert that a Map contains entries; that is, it must not be {@code null} and must contain at least one entry.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param map             the map to check
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the map is {@code null} or contains no entries
+     */
+    public static void notEmpty(Map<?, ?> map, Supplier<String> messageSupplier) {
+        notEmpty(map, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
 }
