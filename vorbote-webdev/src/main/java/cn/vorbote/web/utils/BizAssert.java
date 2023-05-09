@@ -677,7 +677,6 @@ public final class BizAssert {
      * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
      *
      * @param collection      the collection to check
-     * @param code            the code returned to the front-end
      * @param messageSupplier a supplier for the exception message to use if the assertion fails
      * @throws BizException if the collection contains a {@code null} element
      * @see #noNullElements(Collection, int, String)
