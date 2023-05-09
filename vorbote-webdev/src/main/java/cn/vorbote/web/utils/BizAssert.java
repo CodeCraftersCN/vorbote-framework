@@ -624,4 +624,66 @@ public final class BizAssert {
         notEmpty(collection, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
     }
 
+    /**
+     * Assert that a collection contains no {@code null} elements.
+     *
+     * @param collection the collection to check
+     * @param code       the code returned to the front-end
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if the collection contains a {@code null} element
+     */
+    public static void noNullElements(Collection<?> collection, int code, String message) {
+        if (collection != null) {
+            for (var element : collection) {
+                if (element == null) {
+                    throw new BizException(code, message);
+                }
+            }
+        }
+    }
+
+    /**
+     * Assert that a collection contains no {@code null} elements.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection the collection to check
+     * @param message    the exception message to use if the assertion fails
+     * @throws BizException if the collection contains a {@code null} element
+     * @see #noNullElements(Collection, int, String)
+     */
+    public static void noNullElements(Collection<?> collection, String message) {
+        noNullElements(collection, HttpServletResponse.SC_BAD_REQUEST, message);
+    }
+
+    /**
+     * Assert that a collection contains no {@code null} elements.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection      the collection to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the collection contains a {@code null} element
+     * @see #noNullElements(Collection, int, String)
+     */
+    public static void noNullElements(Collection<?> collection, int code, Supplier<String> messageSupplier) {
+        noNullElements(collection, code, getValueFromSupplier(messageSupplier));
+    }
+
+    /**
+     * Assert that a collection contains no {@code null} elements.
+     * <p>
+     * The code will be set to {@code HttpServletResponse.SC_BAD_REQUEST} as default.
+     *
+     * @param collection      the collection to check
+     * @param code            the code returned to the front-end
+     * @param messageSupplier a supplier for the exception message to use if the assertion fails
+     * @throws BizException if the collection contains a {@code null} element
+     * @see #noNullElements(Collection, int, String)
+     */
+    public static void noNullElements(Collection<?> collection, Supplier<String> messageSupplier) {
+        noNullElements(collection, HttpServletResponse.SC_BAD_REQUEST, getValueFromSupplier(messageSupplier));
+    }
+
 }
