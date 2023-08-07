@@ -6,6 +6,8 @@
 [![version 4.0.3](https://badgen.net/badge/version/4.0.0/red)](https://github.com/vorbote/vorbote-framework/releases/tag/v4.0.0)
 ![Spring Boot 3.0.0](https://badgen.net/badge/Spring%20Boot/3.0.0/orange)
 
+> This project has been moved to [JDevKit](https://github.com/CodeCraftersCN/jdevkit)
+
 > 中文版请[点击这里](README_zh-CN.md)
 
 ## Core
